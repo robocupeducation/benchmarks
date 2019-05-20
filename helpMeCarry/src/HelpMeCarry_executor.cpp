@@ -47,6 +47,8 @@ HelpMeCarry_executor::HelpMeCarry_executor()
 
 void HelpMeCarry_executor::init_knowledge()
 {
+  // definir un geometry_msgs::PoseStamped como punto init
+  // definir un map que asocie lugares a puntos de la casa geometry_msgs::PoseStamped y rellenar ese map
 
 }
 
