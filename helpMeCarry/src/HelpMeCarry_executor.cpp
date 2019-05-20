@@ -61,6 +61,12 @@ void HelpMeCarry_executor::Init_code_iterative()
 
 }
 
+void HelpMeCarry_executor::navigate_to_init_code_once()
+{
+  // publicar en /navigate_to un mensaje de tipo geometry_msgs::PoseStamped con la posicion y orientacion del robot
+  // recibiremos un mensaje en /navigate_to/goal_reached std_msgs::Empty cuando el robot llegue a su destino
+}
+
 void HelpMeCarry_executor::navigate_to_init_code_iterative()
 {
   ROS_INFO("State navigate_to_init_code_iterative");

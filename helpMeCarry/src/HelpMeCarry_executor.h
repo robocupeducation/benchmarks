@@ -59,7 +59,7 @@ public:
 	//void understanding_next_location_code_iterative();
 	//void understanding_next_location_code_once();
 	void navigate_to_init_code_iterative();
-	//void navigate_to_init_code_once();
+	void navigate_to_init_code_once();
 
   //bool understanding_next_location_2_navigate_to_loc();
 	//bool navigate_to_init_2_follow_person();
