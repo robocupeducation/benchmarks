@@ -3,8 +3,9 @@
   <include file="$(find follow_person)/launch/follow_person.launch" />
   <node pkg="bica_dialog" type="talkSubscriber" name="Talk_Subscriber" />
   <include file="$(find bica_dialog)/launch/bica_dialog_services.launch" />
-  <node pkg="bica_dialog" type="commands_DialogInterface" name="commands_DialogInterface" output="screen"/>
   <node pkg="bica_dialog" type="location_DialogInterface" name="location_DialogInterface" output="screen"/>
-  <node name="HelpMeCarry_executor_node" pkg="helpme_carry"
-    type="HelpMeCarry_executor_node" respawn="false" output="screen" required="true"/>
+  <node pkg="bica_dialog" type="order_DialogInterface" name="order_DialogInterface" output="screen"/>
+  <node pkg="bica_dialog" type="main_DialogInterface" name="main_DialogInterface" output="screen"/>
+  <node name="spo_recognition_executor_node" pkg="spo_recognition"
+    type="spo_recognition_executor_node" respawn="false" output="screen" required="true"/>
 </launch>
