@@ -43,6 +43,7 @@
 #include "std_msgs/String.h"
 #include "geometry_msgs/PoseStamped.h"
 #include "std_msgs/Empty.h"
+#include <tf2/LinearMath/Quaternion.h>
 #include "HelpMeCarry_HFSM.h"
 #include <string>
 #include <map>
@@ -63,7 +64,7 @@ public:
 	void Init_code_once();
 	//void understanding_next_location_code_iterative();
 	void understanding_next_location_code_once();
-	//void navigate_to_init_code_iterative();
+	void navigate_to_init_code_iterative();
 	void navigate_to_init_code_once();
 
   bool understanding_next_location_2_navigate_to_loc();
@@ -74,6 +75,7 @@ public:
   void targetReachedCb(const std_msgs::Empty::ConstPtr& msg);
   void nextLocationCb(const std_msgs::String::ConstPtr& msg);
   void orderCb(const std_msgs::String::ConstPtr& msg);
+  void addMapElement(float px, float py, float pz, float orientation, std::string key);
   void talk(std::string str);
 
 

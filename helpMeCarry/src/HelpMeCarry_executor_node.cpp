@@ -53,10 +53,9 @@ int main(int argc, char** argv)
 
   while (exec.ok())
   {
+    ROS_INFO("exec ok");
     ros::spinOnce();
     loop_rate.sleep();
   }
-  ros::spin();
-
   return 0;
 }
