@@ -40,36 +40,50 @@
 
 #include <ros/ros.h>
 #include "std_msgs/Bool.h"
+#include "std_msgs/String.h"
+#include "geometry_msgs/PoseStamped.h"
+#include "std_msgs/Empty.h"
 #include "HelpMeCarry_HFSM.h"
 #include <string>
+#include <map>
 
 class HelpMeCarry_executor : public bica::HelpMeCarry_HFSM
 {
 public:
+  //constructor
   HelpMeCarry_executor();
 
   //bool update();
   void init_knowledge();
   //void navigate_to_loc_code_iterative();
-	//void navigate_to_loc_code_once();
+	void navigate_to_loc_code_once();
 	//void follow_person_code_iterative();
-	//void follow_person_code_once();
-	void Init_code_iterative();
+	void follow_person_code_once();
+	//void Init_code_iterative();
 	void Init_code_once();
 	//void understanding_next_location_code_iterative();
-	//void understanding_next_location_code_once();
-	void navigate_to_init_code_iterative();
+	void understanding_next_location_code_once();
+	//void navigate_to_init_code_iterative();
 	void navigate_to_init_code_once();
 
-  //bool understanding_next_location_2_navigate_to_loc();
-	//bool navigate_to_init_2_follow_person();
+  bool understanding_next_location_2_navigate_to_loc();
+	bool navigate_to_init_2_follow_person();
 	bool Init_2_navigate_to_init();
-	//bool follow_person_2_understanding_next_location();
+	bool follow_person_2_understanding_next_location();
+
+  void targetReachedCb(const std_msgs::Empty::ConstPtr& msg);
+  void nextLocationCb(const std_msgs::String::ConstPtr& msg);
+  void orderCb(const std_msgs::String::ConstPtr& msg);
+  void talk(std::string str);
 
 
 private:
   ros::NodeHandle nh_;
-
+  ros::Publisher talk_pub, navigate_pub;
+  ros::Subscriber loc_reached_sub, next_location_sub, orders_sub;
+  std::map<std::string, geometry_msgs::PoseStamped> locations_map;
+  std::string nextLocation;
+  bool loc_reached, understanding_loc2go_loc, follow_person2understanding_location;
 };
 
 #endif
