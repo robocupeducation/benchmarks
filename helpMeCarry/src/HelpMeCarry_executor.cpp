@@ -39,6 +39,7 @@
 
 HelpMeCarry_executor::HelpMeCarry_executor()
 {
+  i = 0;
   loc_reached = 0;
   understanding_loc2go_loc = 0;
   follow_person2understanding_location = 0;
@@ -64,7 +65,12 @@ void HelpMeCarry_executor::init_knowledge()
 
 void HelpMeCarry_executor::navigate_to_loc_code_once()
 {
-  ROS_INFO("Navigate to Location");
+  removeDependency("location_DialogInterface");
+  understanding_loc2go_loc = 0;
+}
+void HelpMeCarry_executor::navigate_to_loc_code_iterative()
+{
+  ROS_WARN("Navigate to Location");
   std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
   it = locations_map.find(nextLocation);
   navigate_pub.publish(it->second);
@@ -72,15 +78,18 @@ void HelpMeCarry_executor::navigate_to_loc_code_once()
 
 void HelpMeCarry_executor::follow_person_code_once()
 {
-  ROS_INFO("Follow Person");
+  loc_reached = 0;
+  ROS_WARN("Follow Person");
   std::string str = "I am ready to follow you";
   talk(str);
   addDependency("PD_Algorithm");
+  addDependency("Person_Followed_Publisher");
+  addDependency("commands_DialogInterface");
 }
 
 void HelpMeCarry_executor::Init_code_once()
 {
-  ROS_INFO("Init");
+  ROS_WARN("Init");
   //Say that Help me Carry starts
   std::string str = "Help me Carry Starts";
   talk(str);
@@ -100,7 +109,7 @@ void HelpMeCarry_executor::navigate_to_init_code_once()
 
 void HelpMeCarry_executor::navigate_to_init_code_iterative()
 {
-  ROS_INFO("navigate_to_init_code_iterative");
+  ROS_WARN("navigate_to_init_code_iterative");
   std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
   it = locations_map.find("init");
   ROS_INFO("%f %f", it->second.pose.position.x, it->second.pose.position.y);
@@ -109,8 +118,20 @@ void HelpMeCarry_executor::navigate_to_init_code_iterative()
 
 void HelpMeCarry_executor::understanding_next_location_code_once()
 {
-  ROS_INFO("Undestanding Next Location");
+  ROS_WARN("Undestanding Next Location");
   removeDependency("PD_Algorithm");
+  removeDependency("Person_Followed_Publisher");
+  removeDependency("commands_DialogInterface");
+}
+
+void HelpMeCarry_executor::understanding_next_location_code_iterative()
+{
+  if(i == 0){
+    std::string str = "Where I have to go?";
+    talk(str);
+    addDependency("location_DialogInterface");
+  }
+  i = 1;
 }
 
 bool HelpMeCarry_executor::Init_2_navigate_to_init()
@@ -120,7 +141,8 @@ bool HelpMeCarry_executor::Init_2_navigate_to_init()
 
 bool HelpMeCarry_executor::navigate_to_init_2_follow_person()
 {
-  return loc_reached;
+  //return loc_reached;
+  return true;
 }
 
 bool HelpMeCarry_executor::understanding_next_location_2_navigate_to_loc()
@@ -147,7 +169,9 @@ void HelpMeCarry_executor::nextLocationCb(const std_msgs::String::ConstPtr& msg)
 void HelpMeCarry_executor::orderCb(const std_msgs::String::ConstPtr& msg)
 {
   std::string str = msg->data;
-  follow_person2understanding_location = str == "stop";
+  if(str == "Stop"){
+    follow_person2understanding_location = true;
+  }
 }
 
 void HelpMeCarry_executor::addMapElement(float px, float py, float pz, float orientation, std::string key)
