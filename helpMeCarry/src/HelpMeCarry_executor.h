@@ -56,13 +56,13 @@ public:
 
   //bool update();
   void init_knowledge();
-  //void navigate_to_loc_code_iterative();
+  void navigate_to_loc_code_iterative();
 	void navigate_to_loc_code_once();
 	//void follow_person_code_iterative();
 	void follow_person_code_once();
 	//void Init_code_iterative();
 	void Init_code_once();
-	//void understanding_next_location_code_iterative();
+	void understanding_next_location_code_iterative();
 	void understanding_next_location_code_once();
 	void navigate_to_init_code_iterative();
 	void navigate_to_init_code_once();
@@ -85,6 +85,7 @@ private:
   ros::Subscriber loc_reached_sub, next_location_sub, orders_sub;
   std::map<std::string, geometry_msgs::PoseStamped> locations_map;
   std::string nextLocation;
+  int i;
   bool loc_reached, understanding_loc2go_loc, follow_person2understanding_location;
 };
 
