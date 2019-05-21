@@ -1,0 +1,17 @@
+<component id="restaurant_HFSM">
+ <state x="-462" id="understand_object" initial="false" y="-170"/>
+ <state x="-853" id="navigate_to_end" initial="false" y="122"/>
+ <state x="-984" id="Init" initial="true" y="-81"/>
+ <state x="-401" id="understand_location" initial="false" y="-31"/>
+ <state x="-832" id="navigate_to_init" initial="false" y="-171"/>
+ <state x="-479" id="navigate_to_location" initial="false" y="119"/>
+ <state x="-661" id="aproach_object" initial="false" y="133"/>
+ <state x="-641" id="aproach_person" initial="false" y="-172"/>
+ <transition dst="aproach_person" src="navigate_to_init"/>
+ <transition dst="aproach_object" src="navigate_to_location"/>
+ <transition dst="understand_location" src="understand_object"/>
+ <transition dst="understand_object" src="aproach_person"/>
+ <transition dst="navigate_to_end" src="aproach_object"/>
+ <transition dst="navigate_to_init" src="Init"/>
+ <transition dst="navigate_to_location" src="understand_location"/>
+</component>
