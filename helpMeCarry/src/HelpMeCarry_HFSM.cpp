@@ -70,29 +70,21 @@ bool HelpMeCarry_HFSM::ok()
 
     switch (state_)
     {
-      	case NAVIGATE_TO_LOC:
+      	case UNDERSTANDING_NEXT_LOCATION:
 
-	navigate_to_loc_code_iterative();
+	understanding_next_location_code_iterative();
 
-	msg.data = "navigate_to_loc";
-	state_pub_.publish(msg);
-	break;
-
-	case FOLLOW_PERSON:
-
-	follow_person_code_iterative();
-
-	msg.data = "follow_person";
-	if(follow_person_2_understanding_next_location())
+	msg.data = "understanding_next_location";
+	if(understanding_next_location_2_navigate_to_loc())
 	{
 
 	deactivateAllDeps();
 
-	state_ = UNDERSTANDING_NEXT_LOCATION;
+	state_ = NAVIGATE_TO_LOC;
 	state_ts_ = ros::Time::now();
 
-	understanding_next_location_activateDeps();
-	understanding_next_location_code_once();
+	navigate_to_loc_activateDeps();
+	navigate_to_loc_code_once();
 	}
 	state_pub_.publish(msg);
 	break;
@@ -116,21 +108,29 @@ bool HelpMeCarry_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
-	case UNDERSTANDING_NEXT_LOCATION:
+	case END:
 
-	understanding_next_location_code_iterative();
+	End_code_iterative();
 
-	msg.data = "understanding_next_location";
-	if(understanding_next_location_2_navigate_to_loc())
+	msg.data = "End";
+	state_pub_.publish(msg);
+	break;
+
+	case NAVIGATE_TO_LOC:
+
+	navigate_to_loc_code_iterative();
+
+	msg.data = "navigate_to_loc";
+	if(navigate_to_loc_2_End())
 	{
 
 	deactivateAllDeps();
 
-	state_ = NAVIGATE_TO_LOC;
+	state_ = END;
 	state_ts_ = ros::Time::now();
 
-	navigate_to_loc_activateDeps();
-	navigate_to_loc_code_once();
+	End_activateDeps();
+	End_code_once();
 	}
 	state_pub_.publish(msg);
 	break;
@@ -154,6 +154,25 @@ bool HelpMeCarry_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
+	case FOLLOW_PERSON:
+
+	follow_person_code_iterative();
+
+	msg.data = "follow_person";
+	if(follow_person_2_understanding_next_location())
+	{
+
+	deactivateAllDeps();
+
+	state_ = UNDERSTANDING_NEXT_LOCATION;
+	state_ts_ = ros::Time::now();
+
+	understanding_next_location_activateDeps();
+	understanding_next_location_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
 
     }
   }
@@ -167,12 +186,7 @@ HelpMeCarry_HFSM::deactivateAllDeps()
 };
 
 void
-HelpMeCarry_HFSM::navigate_to_loc_activateDeps()
-{
-}
-
-void
-HelpMeCarry_HFSM::follow_person_activateDeps()
+HelpMeCarry_HFSM::understanding_next_location_activateDeps()
 {
 }
 
@@ -182,12 +196,22 @@ HelpMeCarry_HFSM::Init_activateDeps()
 }
 
 void
-HelpMeCarry_HFSM::understanding_next_location_activateDeps()
+HelpMeCarry_HFSM::End_activateDeps()
+{
+}
+
+void
+HelpMeCarry_HFSM::navigate_to_loc_activateDeps()
 {
 }
 
 void
 HelpMeCarry_HFSM::navigate_to_init_activateDeps()
+{
+}
+
+void
+HelpMeCarry_HFSM::follow_person_activateDeps()
 {
 }
 

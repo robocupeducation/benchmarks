@@ -89,67 +89,21 @@ bool restaurant_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
-	case NAVIGATE_TO_END:
+	case APROACH_OBJECT:
 
-	navigate_to_end_code_iterative();
+	aproach_object_code_iterative();
 
-	msg.data = "navigate_to_end";
-	state_pub_.publish(msg);
-	break;
-
-	case INIT:
-
-	Init_code_iterative();
-
-	msg.data = "Init";
-	if(Init_2_navigate_to_init())
+	msg.data = "aproach_object";
+	if(aproach_object_2_navigate_to_end())
 	{
 
 	deactivateAllDeps();
 
-	state_ = NAVIGATE_TO_INIT;
+	state_ = NAVIGATE_TO_END;
 	state_ts_ = ros::Time::now();
 
-	navigate_to_init_activateDeps();
-	navigate_to_init_code_once();
-	}
-	state_pub_.publish(msg);
-	break;
-
-	case UNDERSTAND_LOCATION:
-
-	understand_location_code_iterative();
-
-	msg.data = "understand_location";
-	if(understand_location_2_navigate_to_location())
-	{
-
-	deactivateAllDeps();
-
-	state_ = NAVIGATE_TO_LOCATION;
-	state_ts_ = ros::Time::now();
-
-	navigate_to_location_activateDeps();
-	navigate_to_location_code_once();
-	}
-	state_pub_.publish(msg);
-	break;
-
-	case NAVIGATE_TO_INIT:
-
-	navigate_to_init_code_iterative();
-
-	msg.data = "navigate_to_init";
-	if(navigate_to_init_2_aproach_person())
-	{
-
-	deactivateAllDeps();
-
-	state_ = APROACH_PERSON;
-	state_ts_ = ros::Time::now();
-
-	aproach_person_activateDeps();
-	aproach_person_code_once();
+	navigate_to_end_activateDeps();
+	navigate_to_end_code_once();
 	}
 	state_pub_.publish(msg);
 	break;
@@ -173,22 +127,68 @@ bool restaurant_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
-	case APROACH_OBJECT:
+	case UNDERSTAND_LOCATION:
 
-	aproach_object_code_iterative();
+	understand_location_code_iterative();
 
-	msg.data = "aproach_object";
-	if(aproach_object_2_navigate_to_end())
+	msg.data = "understand_location";
+	if(understand_location_2_navigate_to_location())
 	{
 
 	deactivateAllDeps();
 
-	state_ = NAVIGATE_TO_END;
+	state_ = NAVIGATE_TO_LOCATION;
 	state_ts_ = ros::Time::now();
 
-	navigate_to_end_activateDeps();
-	navigate_to_end_code_once();
+	navigate_to_location_activateDeps();
+	navigate_to_location_code_once();
 	}
+	state_pub_.publish(msg);
+	break;
+
+	case INIT:
+
+	Init_code_iterative();
+
+	msg.data = "Init";
+	if(Init_2_navigate_to_init())
+	{
+
+	deactivateAllDeps();
+
+	state_ = NAVIGATE_TO_INIT;
+	state_ts_ = ros::Time::now();
+
+	navigate_to_init_activateDeps();
+	navigate_to_init_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
+	case NAVIGATE_TO_INIT:
+
+	navigate_to_init_code_iterative();
+
+	msg.data = "navigate_to_init";
+	if(navigate_to_init_2_aproach_person())
+	{
+
+	deactivateAllDeps();
+
+	state_ = APROACH_PERSON;
+	state_ts_ = ros::Time::now();
+
+	aproach_person_activateDeps();
+	aproach_person_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
+	case END:
+
+	End_code_iterative();
+
+	msg.data = "End";
 	state_pub_.publish(msg);
 	break;
 
@@ -211,6 +211,25 @@ bool restaurant_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
+	case NAVIGATE_TO_END:
+
+	navigate_to_end_code_iterative();
+
+	msg.data = "navigate_to_end";
+	if(navigate_to_end_2_End())
+	{
+
+	deactivateAllDeps();
+
+	state_ = END;
+	state_ts_ = ros::Time::now();
+
+	End_activateDeps();
+	End_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
 
     }
   }
@@ -229,22 +248,7 @@ restaurant_HFSM::understand_object_activateDeps()
 }
 
 void
-restaurant_HFSM::navigate_to_end_activateDeps()
-{
-}
-
-void
-restaurant_HFSM::Init_activateDeps()
-{
-}
-
-void
-restaurant_HFSM::understand_location_activateDeps()
-{
-}
-
-void
-restaurant_HFSM::navigate_to_init_activateDeps()
+restaurant_HFSM::aproach_object_activateDeps()
 {
 }
 
@@ -254,12 +258,32 @@ restaurant_HFSM::navigate_to_location_activateDeps()
 }
 
 void
-restaurant_HFSM::aproach_object_activateDeps()
+restaurant_HFSM::understand_location_activateDeps()
+{
+}
+
+void
+restaurant_HFSM::Init_activateDeps()
+{
+}
+
+void
+restaurant_HFSM::navigate_to_init_activateDeps()
+{
+}
+
+void
+restaurant_HFSM::End_activateDeps()
 {
 }
 
 void
 restaurant_HFSM::aproach_person_activateDeps()
+{
+}
+
+void
+restaurant_HFSM::navigate_to_end_activateDeps()
 {
 }
 

@@ -55,21 +55,24 @@ public:
 
   void activateCode();
 
-  virtual void navigate_to_loc_code_iterative() {};
-	virtual void navigate_to_loc_code_once() {};
-	virtual void follow_person_code_iterative() {};
-	virtual void follow_person_code_once() {};
+  	virtual void understanding_next_location_code_iterative() {};
+	virtual void understanding_next_location_code_once() {};
 	virtual void Init_code_iterative() {};
 	virtual void Init_code_once() {};
-	virtual void understanding_next_location_code_iterative() {};
-	virtual void understanding_next_location_code_once() {};
+	virtual void End_code_iterative() {};
+	virtual void End_code_once() {};
+	virtual void navigate_to_loc_code_iterative() {};
+	virtual void navigate_to_loc_code_once() {};
 	virtual void navigate_to_init_code_iterative() {};
 	virtual void navigate_to_init_code_once() {};
+	virtual void follow_person_code_iterative() {};
+	virtual void follow_person_code_once() {};
 
-  virtual bool understanding_next_location_2_navigate_to_loc() {return false;};
-	virtual bool navigate_to_init_2_follow_person() {return false;};
+  	virtual bool follow_person_2_understanding_next_location() {return false;};
 	virtual bool Init_2_navigate_to_init() {return false;};
-	virtual bool follow_person_2_understanding_next_location() {return false;};
+	virtual bool navigate_to_init_2_follow_person() {return false;};
+	virtual bool navigate_to_loc_2_End() {return false;};
+	virtual bool understanding_next_location_2_navigate_to_loc() {return false;};
 
 
   bool ok();
@@ -81,18 +84,20 @@ private:
   void step() {}
 
   	void deactivateAllDeps();
-	void navigate_to_loc_activateDeps();
-	void follow_person_activateDeps();
-	void Init_activateDeps();
 	void understanding_next_location_activateDeps();
+	void Init_activateDeps();
+	void End_activateDeps();
+	void navigate_to_loc_activateDeps();
 	void navigate_to_init_activateDeps();
+	void follow_person_activateDeps();
 
 
-  	static const int NAVIGATE_TO_LOC = 0;
-	static const int FOLLOW_PERSON = 1;
-	static const int INIT = 2;
-	static const int UNDERSTANDING_NEXT_LOCATION = 3;
+  	static const int UNDERSTANDING_NEXT_LOCATION = 0;
+	static const int INIT = 1;
+	static const int END = 2;
+	static const int NAVIGATE_TO_LOC = 3;
 	static const int NAVIGATE_TO_INIT = 4;
+	static const int FOLLOW_PERSON = 5;
 
 
   int state_;

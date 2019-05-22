@@ -55,21 +55,24 @@ public:
 
   void activateCode();
 
-  	virtual void Init_code_iterative() {};
-	virtual void Init_code_once() {};
+  	virtual void aproach_person_code_iterative() {};
+	virtual void aproach_person_code_once() {};
 	virtual void object_recognition_code_iterative() {};
 	virtual void object_recognition_code_once() {};
-	virtual void aproach_person_code_iterative() {};
-	virtual void aproach_person_code_once() {};
-	virtual void turn_back_code_iterative() {};
-	virtual void turn_back_code_once() {};
+	virtual void Init_code_iterative() {};
+	virtual void Init_code_once() {};
 	virtual void answer_question_code_iterative() {};
 	virtual void answer_question_code_once() {};
+	virtual void turn_back_code_iterative() {};
+	virtual void turn_back_code_once() {};
+	virtual void End_code_iterative() {};
+	virtual void End_code_once() {};
 
-  	virtual bool answer_question_2_object_recognition() {return false;};
-	virtual bool aproach_person_2_answer_question() {return false;};
+  	virtual bool aproach_person_2_answer_question() {return false;};
 	virtual bool Init_2_turn_back() {return false;};
 	virtual bool turn_back_2_aproach_person() {return false;};
+	virtual bool object_recognition_2_End() {return false;};
+	virtual bool answer_question_2_object_recognition() {return false;};
 
 
   bool ok();
@@ -81,18 +84,20 @@ private:
   void step() {}
 
   	void deactivateAllDeps();
-	void Init_activateDeps();
-	void object_recognition_activateDeps();
 	void aproach_person_activateDeps();
-	void turn_back_activateDeps();
+	void object_recognition_activateDeps();
+	void Init_activateDeps();
 	void answer_question_activateDeps();
+	void turn_back_activateDeps();
+	void End_activateDeps();
 
 
-  	static const int INIT = 0;
+  	static const int APROACH_PERSON = 0;
 	static const int OBJECT_RECOGNITION = 1;
-	static const int APROACH_PERSON = 2;
-	static const int TURN_BACK = 3;
-	static const int ANSWER_QUESTION = 4;
+	static const int INIT = 2;
+	static const int ANSWER_QUESTION = 3;
+	static const int TURN_BACK = 4;
+	static const int END = 5;
 
 
   int state_;

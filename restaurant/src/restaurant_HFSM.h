@@ -55,30 +55,34 @@ public:
 
   void activateCode();
 
-  virtual void understand_object_code_iterative() {};
+  	virtual void understand_object_code_iterative() {};
 	virtual void understand_object_code_once() {};
-	virtual void navigate_to_end_code_iterative() {};
-	virtual void navigate_to_end_code_once() {};
-	virtual void Init_code_iterative() {};
-	virtual void Init_code_once() {};
-	virtual void understand_location_code_iterative() {};
-	virtual void understand_location_code_once() {};
-	virtual void navigate_to_init_code_iterative() {};
-	virtual void navigate_to_init_code_once() {};
-	virtual void navigate_to_location_code_iterative() {};
-	virtual void navigate_to_location_code_once() {};
 	virtual void aproach_object_code_iterative() {};
 	virtual void aproach_object_code_once() {};
+	virtual void navigate_to_location_code_iterative() {};
+	virtual void navigate_to_location_code_once() {};
+	virtual void understand_location_code_iterative() {};
+	virtual void understand_location_code_once() {};
+	virtual void Init_code_iterative() {};
+	virtual void Init_code_once() {};
+	virtual void navigate_to_init_code_iterative() {};
+	virtual void navigate_to_init_code_once() {};
+	virtual void End_code_iterative() {};
+	virtual void End_code_once() {};
 	virtual void aproach_person_code_iterative() {};
 	virtual void aproach_person_code_once() {};
+	virtual void navigate_to_end_code_iterative() {};
+	virtual void navigate_to_end_code_once() {};
 
-  virtual bool navigate_to_init_2_aproach_person() {return false;};
+  	virtual bool Init_2_navigate_to_init() {return false;};
 	virtual bool navigate_to_location_2_aproach_object() {return false;};
+	virtual bool navigate_to_init_2_aproach_person() {return false;};
+	virtual bool understand_location_2_navigate_to_location() {return false;};
 	virtual bool understand_object_2_understand_location() {return false;};
+	virtual bool navigate_to_end_2_End() {return false;};
 	virtual bool aproach_person_2_understand_object() {return false;};
 	virtual bool aproach_object_2_navigate_to_end() {return false;};
-	virtual bool Init_2_navigate_to_init() {return false;};
-	virtual bool understand_location_2_navigate_to_location() {return false;};
+
 
   bool ok();
 
@@ -90,23 +94,25 @@ private:
 
   	void deactivateAllDeps();
 	void understand_object_activateDeps();
-	void navigate_to_end_activateDeps();
-	void Init_activateDeps();
-	void understand_location_activateDeps();
-	void navigate_to_init_activateDeps();
-	void navigate_to_location_activateDeps();
 	void aproach_object_activateDeps();
+	void navigate_to_location_activateDeps();
+	void understand_location_activateDeps();
+	void Init_activateDeps();
+	void navigate_to_init_activateDeps();
+	void End_activateDeps();
 	void aproach_person_activateDeps();
+	void navigate_to_end_activateDeps();
 
 
   	static const int UNDERSTAND_OBJECT = 0;
-	static const int NAVIGATE_TO_END = 1;
-	static const int INIT = 2;
+	static const int APROACH_OBJECT = 1;
+	static const int NAVIGATE_TO_LOCATION = 2;
 	static const int UNDERSTAND_LOCATION = 3;
-	static const int NAVIGATE_TO_INIT = 4;
-	static const int NAVIGATE_TO_LOCATION = 5;
-	static const int APROACH_OBJECT = 6;
+	static const int INIT = 4;
+	static const int NAVIGATE_TO_INIT = 5;
+	static const int END = 6;
 	static const int APROACH_PERSON = 7;
+	static const int NAVIGATE_TO_END = 8;
 
 
   int state_;

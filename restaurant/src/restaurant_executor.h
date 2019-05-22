@@ -79,6 +79,9 @@ public:
 	bool Init_2_navigate_to_init();
 	//bool understand_location_2_navigate_to_location();
 
+  void End_code_iterative();
+	void End_code_once();
+	bool navigate_to_end_2_End();
 
   void talk(std::string str);
   void addMapElement(float px, float py, float pz, float orientation, std::string key);

@@ -70,34 +70,7 @@ bool spo_recognition_HFSM::ok()
 
     switch (state_)
     {
-      	case INIT:
-
-	Init_code_iterative();
-
-	msg.data = "Init";
-	if(Init_2_turn_back())
-	{
-
-	deactivateAllDeps();
-
-	state_ = TURN_BACK;
-	state_ts_ = ros::Time::now();
-
-	turn_back_activateDeps();
-	turn_back_code_once();
-	}
-	state_pub_.publish(msg);
-	break;
-
-	case OBJECT_RECOGNITION:
-
-	object_recognition_code_iterative();
-
-	msg.data = "object_recognition";
-	state_pub_.publish(msg);
-	break;
-
-	case APROACH_PERSON:
+      	case APROACH_PERSON:
 
 	aproach_person_code_iterative();
 
@@ -116,21 +89,40 @@ bool spo_recognition_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
-	case TURN_BACK:
+	case OBJECT_RECOGNITION:
 
-	turn_back_code_iterative();
+	object_recognition_code_iterative();
 
-	msg.data = "turn_back";
-	if(turn_back_2_aproach_person())
+	msg.data = "object_recognition";
+	if(object_recognition_2_End())
 	{
 
 	deactivateAllDeps();
 
-	state_ = APROACH_PERSON;
+	state_ = END;
 	state_ts_ = ros::Time::now();
 
-	aproach_person_activateDeps();
-	aproach_person_code_once();
+	End_activateDeps();
+	End_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
+	case INIT:
+
+	Init_code_iterative();
+
+	msg.data = "Init";
+	if(Init_2_turn_back())
+	{
+
+	deactivateAllDeps();
+
+	state_ = TURN_BACK;
+	state_ts_ = ros::Time::now();
+
+	turn_back_activateDeps();
+	turn_back_code_once();
 	}
 	state_pub_.publish(msg);
 	break;
@@ -154,6 +146,33 @@ bool spo_recognition_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
+	case TURN_BACK:
+
+	turn_back_code_iterative();
+
+	msg.data = "turn_back";
+	if(turn_back_2_aproach_person())
+	{
+
+	deactivateAllDeps();
+
+	state_ = APROACH_PERSON;
+	state_ts_ = ros::Time::now();
+
+	aproach_person_activateDeps();
+	aproach_person_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
+	case END:
+
+	End_code_iterative();
+
+	msg.data = "End";
+	state_pub_.publish(msg);
+	break;
+
 
     }
   }
@@ -167,7 +186,7 @@ spo_recognition_HFSM::deactivateAllDeps()
 };
 
 void
-spo_recognition_HFSM::Init_activateDeps()
+spo_recognition_HFSM::aproach_person_activateDeps()
 {
 }
 
@@ -177,7 +196,12 @@ spo_recognition_HFSM::object_recognition_activateDeps()
 }
 
 void
-spo_recognition_HFSM::aproach_person_activateDeps()
+spo_recognition_HFSM::Init_activateDeps()
+{
+}
+
+void
+spo_recognition_HFSM::answer_question_activateDeps()
 {
 }
 
@@ -187,7 +211,7 @@ spo_recognition_HFSM::turn_back_activateDeps()
 }
 
 void
-spo_recognition_HFSM::answer_question_activateDeps()
+spo_recognition_HFSM::End_activateDeps()
 {
 }
 

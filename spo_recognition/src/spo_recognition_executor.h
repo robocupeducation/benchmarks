@@ -67,6 +67,10 @@ public:
   bool Init_2_turn_back();
   bool turn_back_2_aproach_person();
 
+  void End_code_iterative();
+	void End_code_once();
+  bool object_recognition_2_End();
+
   void talk(std::string str);
   void personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg);
   void objectCb(const std_msgs::String::ConstPtr& msg);

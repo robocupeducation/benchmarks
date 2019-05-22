@@ -1,11 +1,13 @@
 <component id="spo_recognition_HFSM">
- <state initial="true" x="-493" y="-32" id="Init"/>
- <state initial="false" x="-215" y="65" id="object_recognition"/>
- <state initial="false" x="-148" y="-156" id="aproach_person"/>
- <state initial="false" x="-350" y="-152" id="turn_back"/>
- <state initial="false" x="-25" y="-24" id="answer_question"/>
- <transition src="answer_question" dst="object_recognition"/>
- <transition src="aproach_person" dst="answer_question"/>
- <transition src="Init" dst="turn_back"/>
- <transition src="turn_back" dst="aproach_person"/>
+ <state initial="false" y="-156" id="aproach_person" x="-148"/>
+ <state initial="false" y="65" id="object_recognition" x="-215"/>
+ <state initial="true" y="-150" id="Init" x="-590"/>
+ <state initial="false" y="-24" id="answer_question" x="-25"/>
+ <state initial="false" y="-152" id="turn_back" x="-350"/>
+ <state initial="false" y="64" id="End" x="-432"/>
+ <transition dst="answer_question" src="aproach_person"/>
+ <transition dst="turn_back" src="Init"/>
+ <transition dst="aproach_person" src="turn_back"/>
+ <transition dst="End" src="object_recognition"/>
+ <transition dst="object_recognition" src="answer_question"/>
 </component>
