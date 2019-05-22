@@ -62,28 +62,34 @@ public:
 	void Init_code_once();
 	//void understand_location_code_iterative();
 	//void understand_location_code_once();
-	//void navigate_to_init_code_iterative();
-	//void navigate_to_init_code_once();
+	void navigate_to_init_code_iterative();
+	void navigate_to_init_code_once();
 	//void navigate_to_location_code_iterative();
 	//void navigate_to_location_code_once();
 	//void aproach_object_code_iterative();
 	//void aproach_object_code_once();
-	//void aproach_person_code_iterative();
-	//void aproach_person_code_once();
+	void aproach_person_code_iterative();
+	void aproach_person_code_once();
 
-  //bool navigate_to_init_2_aproach_person();
+  bool navigate_to_init_2_aproach_person();
 	//bool navigate_to_location_2_aproach_object();
 	//bool understand_object_2_understand_location();
 	//bool aproach_person_2_understand_object();
 	//bool aproach_object_2_navigate_to_end();
 	bool Init_2_navigate_to_init();
 	//bool understand_location_2_navigate_to_location();
-  void talk(std::string str);
 
+
+  void talk(std::string str);
+  void addMapElement(float px, float py, float pz, float orientation, std::string key);
+  void targetReachedCb(const std_msgs::Empty::ConstPtr& msg);
 
 private:
   ros::NodeHandle nh_;
-  ros::Publisher talk_pub;
+  ros::Publisher talk_pub, navigate_pub;
+  ros::Subscriber loc_reached_sub;
+  std::map<std::string, geometry_msgs::PoseStamped> locations_map;
+  bool loc_reached;
 };
 
 #endif

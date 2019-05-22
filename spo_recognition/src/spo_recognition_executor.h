@@ -40,8 +40,12 @@
 
 #include <ros/ros.h>
 #include "std_msgs/Bool.h"
+#include "std_msgs/String.h"
+#include "std_msgs/Empty.h"
 #include "spo_recognition_HFSM.h"
 #include <string>
+#include <ctime>
+#include "follow_person/PersonFollowedData.h"
 
 class SPORecognition_executor : public bica::spo_recognition_HFSM
 {
@@ -50,22 +54,34 @@ public:
   void init_knowledge();
   void Init_code_iterative();
   void Init_code_once();
-  //void object_recognition_code_iterative();
-  //void object_recognition_code_once();
-  //void aproach_person_code_iterative();
-  //void aproach_person_code_once();
+  void object_recognition_code_iterative();
+  void object_recognition_code_once();
+  void aproach_person_code_iterative();
+  void aproach_person_code_once();
   void turn_back_code_iterative();
   void turn_back_code_once();
-  //void answer_question_code_iterative();
-  //void answer_question_code_once();
-  //bool answer_question_2_object_recognition();
-  //bool aproach_person_2_answer_question();
+  void answer_question_code_iterative();
+  void answer_question_code_once();
+  bool answer_question_2_object_recognition();
+  bool aproach_person_2_answer_question();
   bool Init_2_turn_back();
   bool turn_back_2_aproach_person();
 
-private:
-  ros::NodeHandle nh_;
+  void talk(std::string str);
+  void personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg);
+  void objectCb(const std_msgs::String::ConstPtr& msg);
+  void speakCb(const std_msgs::Empty::ConstPtr& msg);
 
+private:
+
+  float minDist, maxDist, dist_to_person;
+
+  ros::NodeHandle nh_;
+  ros::Publisher talk_pub;
+  ros::Subscriber personDataSub, objectSub, answerFinishedSub;
+  time_t beginTime, finishTime;
+  std::string object;
+  bool objArrived, answerFinished;
 };
 
 #endif
