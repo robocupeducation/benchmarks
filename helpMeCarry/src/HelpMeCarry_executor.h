@@ -80,13 +80,14 @@ public:
   void nextLocationCb(const std_msgs::String::ConstPtr& msg);
   void orderCb(const std_msgs::String::ConstPtr& msg);
   void addMapElement(float px, float py, float pz, float orientation, std::string key);
+  void errorCb(const std_msgs::String::ConstPtr& msg);
   void talk(std::string str);
 
 
 private:
   ros::NodeHandle nh_;
   ros::Publisher talk_pub, navigate_pub;
-  ros::Subscriber loc_reached_sub, next_location_sub, orders_sub;
+  ros::Subscriber loc_reached_sub, next_location_sub, orders_sub, errorsSub;
   std::map<std::string, geometry_msgs::PoseStamped> locations_map;
   std::string nextLocation;
   int i;
