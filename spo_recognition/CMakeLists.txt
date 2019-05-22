@@ -7,6 +7,7 @@ find_package(catkin REQUIRED
   roscpp
   rospy
   bica
+  follow_person
 )
 
 catkin_package(

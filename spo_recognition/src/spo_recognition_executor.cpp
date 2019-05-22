@@ -37,10 +37,16 @@
 /* Mantainer: Francisco Martín fmrico@gmail.com */
 #include "spo_recognition_executor.h"
 
-#include <string>
-
 SPORecognition_executor::SPORecognition_executor()
 {
+  minDist = 900.0;
+  maxDist = 1200.0;
+  objArrived = false;
+  answerFinished = false;
+  talk_pub = nh_.advertise<std_msgs::String>("/talk", 1);
+  personDataSub = nh_.subscribe("/person_followed_data", 1, &SPORecognition_executor::personDataCb, this);
+  objectSub = nh_.subscribe("/object_detected", 1, &SPORecognition_executor::objectCb, this);
+  answerFinishedSub = nh_.subscribe("/finish_speak", 1, &SPORecognition_executor::speakCb, this);
   init_knowledge();
 }
 
@@ -52,7 +58,10 @@ void SPORecognition_executor::init_knowledge()
 
 void SPORecognition_executor::Init_code_once()
 {
-  ROS_INFO("State Init_code_iterative");
+  ROS_WARN("Init");
+  //Say that Help me Carry starts
+  std::string str = "Speech Object and Person Recognition starts";
+  talk(str);
 }
 
 void SPORecognition_executor::Init_code_iterative()
@@ -63,14 +72,56 @@ void SPORecognition_executor::Init_code_iterative()
 void SPORecognition_executor::turn_back_code_once()
 {
   // tomamos la marca de tiempo
+  beginTime = time(NULL);
+  addDependency("mover_publisher");
 }
 
 void SPORecognition_executor::turn_back_code_iterative()
 {
   //publicar para que el robot gire
-  ROS_INFO("State turn_back_code_iterative");
+  ROS_WARN("State turn_back_code_iterative");
+  finishTime = time(NULL);
 }
 
+void SPORecognition_executor::aproach_person_code_iterative()
+{
+
+}
+void SPORecognition_executor::aproach_person_code_once()
+{
+  ROS_WARN("State Aproach_Person");
+  removeDependency("mover_publisher");
+  addDependency("Person_Followed_Publisher");
+  addDependency("PD_Algorithm");
+}
+
+void SPORecognition_executor::object_recognition_code_iterative()
+{
+  if(objArrived){
+    talk(object);
+  }
+  objArrived = false;
+}
+void SPORecognition_executor::object_recognition_code_once()
+{
+  ROS_WARN("State Object_Recognition");
+  removeDependency("main_DialogInterface");
+  answerFinished = false;
+  addDependency("Objects_Detector");
+}
+
+void SPORecognition_executor::answer_question_code_iterative()
+{
+
+}
+void SPORecognition_executor::answer_question_code_once()
+{
+  //No se lo que tengo que hacer
+  ROS_WARN("State Answer_Questions");
+  removeDependency("Person_Followed_Publisher");
+  removeDependency("PD_Algorithm");
+  addDependency("main_DialogInterface");
+}
 
 bool SPORecognition_executor::Init_2_turn_back()
 {
@@ -80,5 +131,40 @@ bool SPORecognition_executor::Init_2_turn_back()
 bool SPORecognition_executor::turn_back_2_aproach_person()
 {
   //checkear cuanto tiempo ha pasado desde que le mandamos que girara la primera vez
-  return true;
+  return finishTime - beginTime >= 4.0;
+}
+
+bool SPORecognition_executor::aproach_person_2_answer_question()
+{
+  return dist_to_person >= minDist && dist_to_person <= maxDist;
+}
+
+bool SPORecognition_executor::answer_question_2_object_recognition()
+{
+  return answerFinished;
+}
+
+
+void SPORecognition_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
+{
+  dist_to_person = msg->dist;
+  personDataSub.shutdown();
+}
+
+void SPORecognition_executor::objectCb(const std_msgs::String::ConstPtr& msg)
+{
+  object = msg->data;
+  objArrived = true;
+}
+
+void SPORecognition_executor::speakCb(const std_msgs::Empty::ConstPtr& msg)
+{
+  answerFinished = true;
+}
+
+void SPORecognition_executor::talk(std::string str)
+{
+  std_msgs::String msg;
+  msg.data = str;
+  talk_pub.publish(msg);
 }
