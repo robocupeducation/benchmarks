@@ -48,6 +48,7 @@ HelpMeCarry_executor::HelpMeCarry_executor()
   loc_reached_sub = nh_.subscribe("/navigate_to/goal_reached", 1, &HelpMeCarry_executor::targetReachedCb, this);
   orders_sub = nh_.subscribe("/commands", 1, &HelpMeCarry_executor::orderCb, this);
   next_location_sub = nh_.subscribe("/locations", 1, &HelpMeCarry_executor::nextLocationCb, this);
+  errorsSub = nh_.subscribe("/errors", 1, &HelpMeCarry_executor::errorCb, this);
   init_knowledge();
 }
 
@@ -80,7 +81,7 @@ void HelpMeCarry_executor::follow_person_code_once()
 {
   loc_reached = 0;
   ROS_WARN("Follow Person");
-  std::string str = "I am ready to follow you";
+  std::string str = "I am ready to follow you. Keep in front of me, please";
   talk(str);
   addDependency("PD_Algorithm");
   addDependency("Person_Followed_Publisher");
@@ -141,8 +142,8 @@ bool HelpMeCarry_executor::Init_2_navigate_to_init()
 
 bool HelpMeCarry_executor::navigate_to_init_2_follow_person()
 {
-  //return loc_reached;
-  return true;
+  return loc_reached;
+  //return true;
 }
 
 bool HelpMeCarry_executor::understanding_next_location_2_navigate_to_loc()
@@ -171,6 +172,17 @@ void HelpMeCarry_executor::orderCb(const std_msgs::String::ConstPtr& msg)
   std::string str = msg->data;
   if(str == "Stop"){
     follow_person2understanding_location = true;
+  }
+}
+
+void HelpMeCarry_executor::errorCb(const std_msgs::String::ConstPtr& msg)
+{
+  std::string str = msg->data;
+  if(str == "unknown command"){
+    str = "I am going to the kitchen";
+    talk(str);
+    understanding_loc2go_loc = 1;
+    nextLocation = "kitchen";
   }
 }
 
