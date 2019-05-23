@@ -1,7 +1,7 @@
 <launch>
   <!--<include file="$(find darknet_ros)/launch/darknet_ros.launch" />-->
   <include file="$(find follow_person)/launch/follow_person.launch" />
-  <node pkg="bica_dialog" type="talkSubscriber" name="Talk_Subscriber" />
+  <node pkg="bica_dialog" type="talkSubscriber" name="Talk_Subscriber" output="screen"/>
   <include file="$(find bica_dialog)/launch/bica_dialog_services.launch" />
   <node pkg="bica_dialog" type="commands_DialogInterface" name="commands_DialogInterface" output="screen"/>
   <node pkg="bica_dialog" type="location_DialogInterface" name="location_DialogInterface" output="screen"/>
