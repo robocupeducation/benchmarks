@@ -1,5 +1,6 @@
 <launch>
   <!--<include file="$(find darknet_ros)/launch/darknet_ros.launch" />-->
+  <!--<include file="$(find spo_recognition)/launch/spo_data_logging.launch" />-->
   <include file="$(find follow_person)/launch/follow_person.launch" />
   <node pkg="navigation_robocup_edu" type="mover_node" name="mover_publisher" />
   <node pkg="object_detection" type="object_detector" name = "Objects_Detector" />

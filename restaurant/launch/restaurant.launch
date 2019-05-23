@@ -1,4 +1,5 @@
 <launch>
+  <!--<include file="$(find restaurant)/launch/restaurant_data_logging.launch" />-->
   <include file="$(find bica_dialog)/launch/bica_dialog_services.launch" />
   <node pkg="bica_dialog" type="ros_soundclient.py" name="ros_soundclient" output="screen"/>
   <node pkg="bica_dialog" type="pinger" name="pinger" output="screen"/>

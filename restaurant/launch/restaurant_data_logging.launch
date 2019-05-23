@@ -1,0 +1,6 @@
+<launch>
+  <arg name = "tbm" default="restaurant"/>
+  <arg name = "pathToRosbag" value = "/home/jgines/RobocupEducation_date_$(arg tbm).bag"/>
+  <node pkg="rosbag" type="record" name="rosbag_erl"
+       args="record -a -O $(arg pathToRosbag)" />
+</launch>
