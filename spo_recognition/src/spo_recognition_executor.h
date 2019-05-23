@@ -67,7 +67,7 @@ public:
   bool Init_2_turn_back();
   bool turn_back_2_aproach_person();
 
-  void End_code_iterative();
+  //void End_code_iterative();
 	void End_code_once();
   bool object_recognition_2_End();
 
@@ -75,6 +75,7 @@ public:
   void personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg);
   void objectCb(const std_msgs::String::ConstPtr& msg);
   void speakCb(const std_msgs::Empty::ConstPtr& msg);
+  void stopObjCb(const std_msgs::Empty::ConstPtr& msg);
 
 private:
 
@@ -82,10 +83,10 @@ private:
 
   ros::NodeHandle nh_;
   ros::Publisher talk_pub;
-  ros::Subscriber personDataSub, objectSub, answerFinishedSub;
+  ros::Subscriber personDataSub, objectSub, answerFinishedSub, objRecogFinishedSub;
   time_t beginTime, finishTime;
   std::string object;
-  bool objArrived, answerFinished;
+  bool objArrived, answerFinished, objRecogFinished;
 };
 
 #endif
