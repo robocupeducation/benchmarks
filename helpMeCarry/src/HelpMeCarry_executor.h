@@ -68,8 +68,8 @@ public:
 	void navigate_to_init_code_once();
 
   //void End_code_iterative();
-	//void End_code_once();
-	//bool navigate_to_loc_2_End();
+	void End_code_once();
+	bool navigate_to_loc_2_End();
 
   bool understanding_next_location_2_navigate_to_loc();
 	bool navigate_to_init_2_follow_person();

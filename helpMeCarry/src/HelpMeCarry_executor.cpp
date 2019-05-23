@@ -120,19 +120,23 @@ void HelpMeCarry_executor::navigate_to_init_code_iterative()
 void HelpMeCarry_executor::understanding_next_location_code_once()
 {
   ROS_WARN("Undestanding Next Location");
+  std::string str = "Where I have to go?";
+  talk(str);
   removeDependency("PD_Algorithm");
   removeDependency("Person_Followed_Publisher");
   removeDependency("commands_DialogInterface");
+  addDependency("location_DialogInterface");
 }
 
 void HelpMeCarry_executor::understanding_next_location_code_iterative()
 {
-  if(i == 0){
-    std::string str = "Where I have to go?";
-    talk(str);
-    addDependency("location_DialogInterface");
-  }
-  i = 1;
+
+}
+
+void HelpMeCarry_executor::End_code_once()
+{
+  std::string str = "Help me carry finished";
+  talk(str);
 }
 
 bool HelpMeCarry_executor::Init_2_navigate_to_init()
@@ -142,8 +146,8 @@ bool HelpMeCarry_executor::Init_2_navigate_to_init()
 
 bool HelpMeCarry_executor::navigate_to_init_2_follow_person()
 {
-  return loc_reached;
-  //return true;
+  //return loc_reached;
+  return true;
 }
 
 bool HelpMeCarry_executor::understanding_next_location_2_navigate_to_loc()
@@ -154,6 +158,11 @@ bool HelpMeCarry_executor::understanding_next_location_2_navigate_to_loc()
 bool HelpMeCarry_executor::follow_person_2_understanding_next_location()
 {
   return follow_person2understanding_location;
+}
+
+bool HelpMeCarry_executor::navigate_to_loc_2_End()
+{
+  return loc_reached;
 }
 
 void HelpMeCarry_executor::targetReachedCb(const std_msgs::Empty::ConstPtr& msg)
