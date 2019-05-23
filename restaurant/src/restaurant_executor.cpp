@@ -82,6 +82,7 @@ void restaurant_executor::aproach_person_code_iterative()
 void restaurant_executor::aproach_person_code_once()
 {
   ROS_WARN("State Aproach_Person");
+  loc_reached = 0;
   addDependency("Person_Followed_Publisher");
   addDependency("PD_Algorithm");
 }
@@ -94,6 +95,11 @@ bool restaurant_executor::Init_2_navigate_to_init()
 bool restaurant_executor::navigate_to_init_2_aproach_person()
 {
   return loc_reached;
+}
+
+bool restaurant_executor::aproach_person_2_understand_object()
+{
+  
 }
 
 

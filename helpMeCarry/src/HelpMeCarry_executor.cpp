@@ -120,11 +120,11 @@ void HelpMeCarry_executor::navigate_to_init_code_iterative()
 void HelpMeCarry_executor::understanding_next_location_code_once()
 {
   ROS_WARN("Undestanding Next Location");
-  std::string str = "Where I have to go?";
-  talk(str);
   removeDependency("PD_Algorithm");
   removeDependency("Person_Followed_Publisher");
   removeDependency("commands_DialogInterface");
+  std::string str = "Where I have to go?";
+  talk(str);
   addDependency("location_DialogInterface");
 }
 
