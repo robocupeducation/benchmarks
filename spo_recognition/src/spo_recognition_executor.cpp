@@ -143,12 +143,14 @@ bool SPORecognition_executor::turn_back_2_aproach_person()
 
 bool SPORecognition_executor::aproach_person_2_answer_question()
 {
-  return dist_to_person >= minDist && dist_to_person <= maxDist;
+  //return dist_to_person >= minDist && dist_to_person <= maxDist;
+  return true;
 }
 
 bool SPORecognition_executor::answer_question_2_object_recognition()
 {
-  return answerFinished;
+  //return answerFinished;
+  return true;
 }
 
 bool SPORecognition_executor::object_recognition_2_End()
@@ -164,7 +166,7 @@ void SPORecognition_executor::stopObjCb(const std_msgs::Empty::ConstPtr& msg)
 void SPORecognition_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
 {
   dist_to_person = msg->dist;
-  personDataSub.shutdown();
+  //personDataSub.shutdown();
 }
 
 void SPORecognition_executor::objectCb(const std_msgs::String::ConstPtr& msg)
