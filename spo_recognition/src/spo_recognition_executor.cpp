@@ -39,21 +39,22 @@
 
 SPORecognition_executor::SPORecognition_executor()
 {
-  minDist = 900.0;
-  maxDist = 1200.0;
-  objArrived = false;
-  answerFinished = false;
   talk_pub = nh_.advertise<std_msgs::String>("/talk", 1);
   personDataSub = nh_.subscribe("/person_followed_data", 1, &SPORecognition_executor::personDataCb, this);
   objectSub = nh_.subscribe("/object_detected", 1, &SPORecognition_executor::objectCb, this);
   answerFinishedSub = nh_.subscribe("/finish_speak", 1, &SPORecognition_executor::speakCb, this);
+  objRecogFinishedSub = nh_.subscribe("/stop_obj_recog", 1, &SPORecognition_executor::stopObjCb, this);
   init_knowledge();
 }
 
 
 void SPORecognition_executor::init_knowledge()
 {
-
+  minDist = 900.0;
+  maxDist = 1200.0;
+  objArrived = false;
+  answerFinished = false;
+  objRecogFinished = false;
 }
 
 void SPORecognition_executor::Init_code_once()
@@ -123,6 +124,12 @@ void SPORecognition_executor::answer_question_code_once()
   addDependency("main_DialogInterface");
 }
 
+void SPORecognition_executor::End_code_once()
+{
+  std::string str = "Speech, object and person recognition finished";
+  talk(str);
+}
+
 bool SPORecognition_executor::Init_2_turn_back()
 {
   return true;
@@ -144,6 +151,15 @@ bool SPORecognition_executor::answer_question_2_object_recognition()
   return answerFinished;
 }
 
+bool SPORecognition_executor::object_recognition_2_End()
+{
+  return objRecogFinished;
+}
+
+void SPORecognition_executor::stopObjCb(const std_msgs::Empty::ConstPtr& msg)
+{
+  objRecogFinished = true;
+}
 
 void SPORecognition_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
 {
