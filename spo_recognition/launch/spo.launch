@@ -12,4 +12,5 @@
   <node pkg="bica_dialog" type="pinger" name="pinger" output="screen"/>
   <node name="spo_recognition_executor_node" pkg="spo_recognition"
     type="spo_recognition_executor_node" respawn="false" output="screen" required="true"/>
+  <node pkg="bica_dialog" type="batterycontrol" name="batterycontrol" output="screen"/>
 </launch>
