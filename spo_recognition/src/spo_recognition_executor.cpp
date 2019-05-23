@@ -98,7 +98,9 @@ void SPORecognition_executor::aproach_person_code_once()
 
 void SPORecognition_executor::object_recognition_code_iterative()
 {
+    ROS_WARN("State Object_Recognition iterative");
   if(objArrived){
+      ROS_WARN("State Object_Recognition objArrived detected %s", object.c_str());
     talk(object);
   }
   objArrived = false;

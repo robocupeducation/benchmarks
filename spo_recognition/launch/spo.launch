@@ -3,7 +3,9 @@
   <!--<include file="$(find spo_recognition)/launch/spo_data_logging.launch" />-->
   <include file="$(find follow_person)/launch/follow_person.launch" />
   <node pkg="navigation_robocup_edu" type="mover_node" name="mover_publisher" />
-  <node pkg="object_detection" type="object_detector" name = "Objects_Detector" />
+  <node pkg="object_detection" type="object_detector" name = "Objects_Detector" >
+      <rosparam command="load" file="$(find spo_recognition)/config/objects.yaml" />
+  </node>
   <node pkg="bica_dialog" type="ros_soundclient.py" name="ros_soundclient" output="screen"/>
   <include file="$(find bica_dialog)/launch/bica_dialog_services.launch" />
   <node pkg="bica_dialog" type="location_DialogInterface" name="location_DialogInterface" output="screen"/>
