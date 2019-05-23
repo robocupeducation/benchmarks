@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find bica_dialog)/launch/bica_dialog_services.launch" />
+  <node pkg="bica_dialog" type="pinger" name="pinger" output="screen"/>
+</launch>

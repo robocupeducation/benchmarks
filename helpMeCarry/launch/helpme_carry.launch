@@ -7,4 +7,5 @@
   <node pkg="bica_dialog" type="location_DialogInterface" name="location_DialogInterface" output="screen"/>
   <node name="HelpMeCarry_executor_node" pkg="helpme_carry"
     type="HelpMeCarry_executor_node" respawn="false" output="screen" required="true"/>
+  <node pkg="bica_dialog" type="pinger" name="pinger" output="screen"/>
 </launch>
