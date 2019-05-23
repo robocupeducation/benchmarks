@@ -138,7 +138,7 @@ bool SPORecognition_executor::Init_2_turn_back()
 bool SPORecognition_executor::turn_back_2_aproach_person()
 {
   //checkear cuanto tiempo ha pasado desde que le mandamos que girara la primera vez
-  return finishTime - beginTime >= 4.0;
+  return finishTime - beginTime >= 4.5;
 }
 
 bool SPORecognition_executor::aproach_person_2_answer_question()
