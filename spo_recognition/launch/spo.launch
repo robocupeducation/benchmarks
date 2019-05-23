@@ -3,7 +3,7 @@
   <include file="$(find follow_person)/launch/follow_person.launch" />
   <node pkg="navigation_robocup_edu" type="mover_node" name="mover_publisher" />
   <node pkg="object_detection" type="object_detector" name = "Objects_Detector" />
-  <node pkg="bica_dialog" type="talkSubscriber" name="Talk_Subscriber" />
+  <node pkg="bica_dialog" type="ros_soundclient.py" name="ros_soundclient" output="screen"/>
   <include file="$(find bica_dialog)/launch/bica_dialog_services.launch" />
   <node pkg="bica_dialog" type="location_DialogInterface" name="location_DialogInterface" output="screen"/>
   <node pkg="bica_dialog" type="order_DialogInterface" name="order_DialogInterface" output="screen"/>
