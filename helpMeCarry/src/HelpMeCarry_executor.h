@@ -69,10 +69,13 @@ public:
 
   //void End_code_iterative();
 	void End_code_once();
-	bool navigate_to_loc_2_End();
+  void searching_person_code_iterative();
+	void searching_person_code_once();
 
+	bool navigate_to_loc_2_End();
   bool understanding_next_location_2_navigate_to_loc();
-	bool navigate_to_init_2_follow_person();
+  bool navigate_to_init_2_searching_person();
+	bool searching_person_2_follow_person();
 	bool Init_2_navigate_to_init();
 	bool follow_person_2_understanding_next_location();
 
@@ -82,7 +85,6 @@ public:
   void addMapElement(float px, float py, float pz, float orientation, std::string key);
   void errorCb(const std_msgs::String::ConstPtr& msg);
   void talk(std::string str);
-
 
 private:
   ros::NodeHandle nh_;

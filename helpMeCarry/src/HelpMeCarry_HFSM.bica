@@ -1,13 +1,15 @@
 <component id="HelpMeCarry_HFSM">
- <state id="understanding_next_location" initial="false" y="-410" x="-233"/>
- <state id="Init" initial="true" y="-519" x="-803"/>
- <state id="End" initial="false" y="-271" x="-630"/>
- <state id="navigate_to_loc" initial="false" y="-271" x="-447"/>
- <state id="navigate_to_init" initial="false" y="-520" x="-595"/>
- <state id="follow_person" initial="false" y="-522" x="-368"/>
- <transition dst="understanding_next_location" src="follow_person"/>
- <transition dst="navigate_to_init" src="Init"/>
- <transition dst="follow_person" src="navigate_to_init"/>
- <transition dst="End" src="navigate_to_loc"/>
- <transition dst="navigate_to_loc" src="understanding_next_location"/>
+ <state x="-630" initial="false" y="-271" id="End"/>
+ <state x="-447" initial="false" y="-271" id="navigate_to_loc"/>
+ <state x="-233" initial="false" y="-410" id="understanding_next_location"/>
+ <state x="-787" initial="false" y="-523" id="navigate_to_init"/>
+ <state x="-1020" initial="true" y="-521" id="Init"/>
+ <state x="-578" initial="false" y="-524" id="searching_person"/>
+ <state x="-368" initial="false" y="-522" id="follow_person"/>
+ <transition src="understanding_next_location" dst="navigate_to_loc"/>
+ <transition src="navigate_to_loc" dst="End"/>
+ <transition src="navigate_to_init" dst="searching_person"/>
+ <transition src="follow_person" dst="understanding_next_location"/>
+ <transition src="Init" dst="navigate_to_init"/>
+ <transition src="searching_person" dst="follow_person"/>
 </component>

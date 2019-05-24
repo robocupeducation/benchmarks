@@ -55,24 +55,27 @@ public:
 
   void activateCode();
 
-  	virtual void understanding_next_location_code_iterative() {};
-	virtual void understanding_next_location_code_once() {};
-	virtual void Init_code_iterative() {};
-	virtual void Init_code_once() {};
-	virtual void End_code_iterative() {};
+  	virtual void End_code_iterative() {};
 	virtual void End_code_once() {};
 	virtual void navigate_to_loc_code_iterative() {};
 	virtual void navigate_to_loc_code_once() {};
+	virtual void understanding_next_location_code_iterative() {};
+	virtual void understanding_next_location_code_once() {};
 	virtual void navigate_to_init_code_iterative() {};
 	virtual void navigate_to_init_code_once() {};
+	virtual void Init_code_iterative() {};
+	virtual void Init_code_once() {};
+	virtual void searching_person_code_iterative() {};
+	virtual void searching_person_code_once() {};
 	virtual void follow_person_code_iterative() {};
 	virtual void follow_person_code_once() {};
 
-  	virtual bool follow_person_2_understanding_next_location() {return false;};
-	virtual bool Init_2_navigate_to_init() {return false;};
-	virtual bool navigate_to_init_2_follow_person() {return false;};
+  	virtual bool understanding_next_location_2_navigate_to_loc() {return false;};
 	virtual bool navigate_to_loc_2_End() {return false;};
-	virtual bool understanding_next_location_2_navigate_to_loc() {return false;};
+	virtual bool navigate_to_init_2_searching_person() {return false;};
+	virtual bool follow_person_2_understanding_next_location() {return false;};
+	virtual bool Init_2_navigate_to_init() {return false;};
+	virtual bool searching_person_2_follow_person() {return false;};
 
 
   bool ok();
@@ -84,20 +87,22 @@ private:
   void step() {}
 
   	void deactivateAllDeps();
-	void understanding_next_location_activateDeps();
-	void Init_activateDeps();
 	void End_activateDeps();
 	void navigate_to_loc_activateDeps();
+	void understanding_next_location_activateDeps();
 	void navigate_to_init_activateDeps();
+	void Init_activateDeps();
+	void searching_person_activateDeps();
 	void follow_person_activateDeps();
 
 
-  	static const int UNDERSTANDING_NEXT_LOCATION = 0;
-	static const int INIT = 1;
-	static const int END = 2;
-	static const int NAVIGATE_TO_LOC = 3;
-	static const int NAVIGATE_TO_INIT = 4;
-	static const int FOLLOW_PERSON = 5;
+  	static const int END = 0;
+	static const int NAVIGATE_TO_LOC = 1;
+	static const int UNDERSTANDING_NEXT_LOCATION = 2;
+	static const int NAVIGATE_TO_INIT = 3;
+	static const int INIT = 4;
+	static const int SEARCHING_PERSON = 5;
+	static const int FOLLOW_PERSON = 6;
 
 
   int state_;

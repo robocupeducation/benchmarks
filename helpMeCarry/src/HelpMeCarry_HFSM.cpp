@@ -70,45 +70,7 @@ bool HelpMeCarry_HFSM::ok()
 
     switch (state_)
     {
-      	case UNDERSTANDING_NEXT_LOCATION:
-
-	understanding_next_location_code_iterative();
-
-	msg.data = "understanding_next_location";
-	if(understanding_next_location_2_navigate_to_loc())
-	{
-
-	deactivateAllDeps();
-
-	state_ = NAVIGATE_TO_LOC;
-	state_ts_ = ros::Time::now();
-
-	navigate_to_loc_activateDeps();
-	navigate_to_loc_code_once();
-	}
-	state_pub_.publish(msg);
-	break;
-
-	case INIT:
-
-	Init_code_iterative();
-
-	msg.data = "Init";
-	if(Init_2_navigate_to_init())
-	{
-
-	deactivateAllDeps();
-
-	state_ = NAVIGATE_TO_INIT;
-	state_ts_ = ros::Time::now();
-
-	navigate_to_init_activateDeps();
-	navigate_to_init_code_once();
-	}
-	state_pub_.publish(msg);
-	break;
-
-	case END:
+      	case END:
 
 	End_code_iterative();
 
@@ -135,12 +97,69 @@ bool HelpMeCarry_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
+	case UNDERSTANDING_NEXT_LOCATION:
+
+	understanding_next_location_code_iterative();
+
+	msg.data = "understanding_next_location";
+	if(understanding_next_location_2_navigate_to_loc())
+	{
+
+	deactivateAllDeps();
+
+	state_ = NAVIGATE_TO_LOC;
+	state_ts_ = ros::Time::now();
+
+	navigate_to_loc_activateDeps();
+	navigate_to_loc_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
 	case NAVIGATE_TO_INIT:
 
 	navigate_to_init_code_iterative();
 
 	msg.data = "navigate_to_init";
-	if(navigate_to_init_2_follow_person())
+	if(navigate_to_init_2_searching_person())
+	{
+
+	deactivateAllDeps();
+
+	state_ = SEARCHING_PERSON;
+	state_ts_ = ros::Time::now();
+
+	searching_person_activateDeps();
+	searching_person_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
+	case INIT:
+
+	Init_code_iterative();
+
+	msg.data = "Init";
+	if(Init_2_navigate_to_init())
+	{
+
+	deactivateAllDeps();
+
+	state_ = NAVIGATE_TO_INIT;
+	state_ts_ = ros::Time::now();
+
+	navigate_to_init_activateDeps();
+	navigate_to_init_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
+	case SEARCHING_PERSON:
+
+	searching_person_code_iterative();
+
+	msg.data = "searching_person";
+	if(searching_person_2_follow_person())
 	{
 
 	deactivateAllDeps();
@@ -186,16 +205,6 @@ HelpMeCarry_HFSM::deactivateAllDeps()
 };
 
 void
-HelpMeCarry_HFSM::understanding_next_location_activateDeps()
-{
-}
-
-void
-HelpMeCarry_HFSM::Init_activateDeps()
-{
-}
-
-void
 HelpMeCarry_HFSM::End_activateDeps()
 {
 }
@@ -206,7 +215,22 @@ HelpMeCarry_HFSM::navigate_to_loc_activateDeps()
 }
 
 void
+HelpMeCarry_HFSM::understanding_next_location_activateDeps()
+{
+}
+
+void
 HelpMeCarry_HFSM::navigate_to_init_activateDeps()
+{
+}
+
+void
+HelpMeCarry_HFSM::Init_activateDeps()
+{
+}
+
+void
+HelpMeCarry_HFSM::searching_person_activateDeps()
 {
 }
 

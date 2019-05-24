@@ -77,6 +77,16 @@ void HelpMeCarry_executor::navigate_to_loc_code_iterative()
   navigate_pub.publish(it->second);
 }
 
+void HelpMeCarry_executor::searching_person_code_iterative()
+{
+
+}
+
+void HelpMeCarry_executor::searching_person_code_once()
+{
+
+}
+
 void HelpMeCarry_executor::follow_person_code_once()
 {
   loc_reached = 0;
@@ -98,14 +108,7 @@ void HelpMeCarry_executor::Init_code_once()
 
 void HelpMeCarry_executor::navigate_to_init_code_once()
 {
-  // publicar en /navigate_to un mensaje de tipo geometry_msgs::PoseStamped con la posicion y orientacion del robot
-  /*ROS_INFO("navigate_to_init_code_once");
-  std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
-  it = locations_map.find("init");
-  ROS_INFO("%f %f", it->second.pose.position.x, it->second.pose.position.y);
-  navigate_pub.publish(it->second);
-*/
-  // recibiremos un mensaje en /navigate_to/goal_reached std_msgs::Empty cuando el robot llegue a su destino
+
 }
 
 void HelpMeCarry_executor::navigate_to_init_code_iterative()
@@ -144,10 +147,16 @@ bool HelpMeCarry_executor::Init_2_navigate_to_init()
   return true;
 }
 
-bool HelpMeCarry_executor::navigate_to_init_2_follow_person()
+
+bool HelpMeCarry_executor::navigate_to_init_2_searching_person()
 {
   //return loc_reached;
   return true;
+}
+
+bool HelpMeCarry_executor::searching_person_2_follow_person()
+{
+  return false;
 }
 
 bool HelpMeCarry_executor::understanding_next_location_2_navigate_to_loc()
