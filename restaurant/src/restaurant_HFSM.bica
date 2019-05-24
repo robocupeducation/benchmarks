@@ -1,19 +1,21 @@
 <component id="restaurant_HFSM">
- <state initial="false" x="-462" id="understand_object" y="-170"/>
- <state initial="false" x="-661" id="aproach_object" y="133"/>
- <state initial="false" x="-479" id="navigate_to_location" y="119"/>
- <state initial="false" x="-401" id="understand_location" y="-31"/>
- <state initial="true" x="-984" id="Init" y="-81"/>
- <state initial="false" x="-832" id="navigate_to_init" y="-171"/>
- <state initial="false" x="-1028" id="End" y="133"/>
- <state initial="false" x="-641" id="aproach_person" y="-172"/>
- <state initial="false" x="-853" id="navigate_to_end" y="135"/>
- <transition dst="navigate_to_init" src="Init"/>
+ <state id="understand_object" y="-172" x="-455" initial="false"/>
+ <state id="End" y="132" x="-1135" initial="false"/>
+ <state id="aproach_object" y="129" x="-680" initial="false"/>
+ <state id="understand_location" y="-9" x="-411" initial="false"/>
+ <state id="navigate_to_init" y="-170" x="-970" initial="false"/>
+ <state id="aproach_person" y="-172" x="-641" initial="false"/>
+ <state id="navigate_to_end" y="129" x="-906" initial="false"/>
+ <state id="searching_person" y="-171" x="-801" initial="false"/>
+ <state id="navigate_to_location" y="121" x="-483" initial="false"/>
+ <state id="Init" y="-167" x="-1144" initial="true"/>
  <transition dst="aproach_object" src="navigate_to_location"/>
- <transition dst="aproach_person" src="navigate_to_init"/>
  <transition dst="navigate_to_location" src="understand_location"/>
- <transition dst="understand_location" src="understand_object"/>
- <transition dst="End" src="navigate_to_end"/>
+ <transition dst="aproach_person" src="searching_person"/>
+ <transition dst="navigate_to_init" src="Init"/>
  <transition dst="understand_object" src="aproach_person"/>
  <transition dst="navigate_to_end" src="aproach_object"/>
+ <transition dst="searching_person" src="navigate_to_init"/>
+ <transition dst="End" src="navigate_to_end"/>
+ <transition dst="understand_location" src="understand_object"/>
 </component>

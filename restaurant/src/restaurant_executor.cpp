@@ -92,16 +92,20 @@ bool restaurant_executor::Init_2_navigate_to_init()
   return true;
 }
 
-bool restaurant_executor::navigate_to_init_2_aproach_person()
+bool restaurant_executor::searching_person_2_aproach_person()
+{
+  return false;
+}
+
+bool restaurant_executor::navigate_to_init_2_searching_person()
 {
   return loc_reached;
 }
 
 bool restaurant_executor::aproach_person_2_understand_object()
 {
-  
-}
 
+}
 
 void restaurant_executor::talk(std::string str)
 {

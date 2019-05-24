@@ -89,6 +89,14 @@ bool restaurant_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
+	case END:
+
+	End_code_iterative();
+
+	msg.data = "End";
+	state_pub_.publish(msg);
+	break;
+
 	case APROACH_OBJECT:
 
 	aproach_object_code_iterative();
@@ -104,25 +112,6 @@ bool restaurant_HFSM::ok()
 
 	navigate_to_end_activateDeps();
 	navigate_to_end_code_once();
-	}
-	state_pub_.publish(msg);
-	break;
-
-	case NAVIGATE_TO_LOCATION:
-
-	navigate_to_location_code_iterative();
-
-	msg.data = "navigate_to_location";
-	if(navigate_to_location_2_aproach_object())
-	{
-
-	deactivateAllDeps();
-
-	state_ = APROACH_OBJECT;
-	state_ts_ = ros::Time::now();
-
-	aproach_object_activateDeps();
-	aproach_object_code_once();
 	}
 	state_pub_.publish(msg);
 	break;
@@ -146,49 +135,22 @@ bool restaurant_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
-	case INIT:
-
-	Init_code_iterative();
-
-	msg.data = "Init";
-	if(Init_2_navigate_to_init())
-	{
-
-	deactivateAllDeps();
-
-	state_ = NAVIGATE_TO_INIT;
-	state_ts_ = ros::Time::now();
-
-	navigate_to_init_activateDeps();
-	navigate_to_init_code_once();
-	}
-	state_pub_.publish(msg);
-	break;
-
 	case NAVIGATE_TO_INIT:
 
 	navigate_to_init_code_iterative();
 
 	msg.data = "navigate_to_init";
-	if(navigate_to_init_2_aproach_person())
+	if(navigate_to_init_2_searching_person())
 	{
 
 	deactivateAllDeps();
 
-	state_ = APROACH_PERSON;
+	state_ = SEARCHING_PERSON;
 	state_ts_ = ros::Time::now();
 
-	aproach_person_activateDeps();
-	aproach_person_code_once();
+	searching_person_activateDeps();
+	searching_person_code_once();
 	}
-	state_pub_.publish(msg);
-	break;
-
-	case END:
-
-	End_code_iterative();
-
-	msg.data = "End";
 	state_pub_.publish(msg);
 	break;
 
@@ -230,6 +192,63 @@ bool restaurant_HFSM::ok()
 	state_pub_.publish(msg);
 	break;
 
+	case SEARCHING_PERSON:
+
+	searching_person_code_iterative();
+
+	msg.data = "searching_person";
+	if(searching_person_2_aproach_person())
+	{
+
+	deactivateAllDeps();
+
+	state_ = APROACH_PERSON;
+	state_ts_ = ros::Time::now();
+
+	aproach_person_activateDeps();
+	aproach_person_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
+	case NAVIGATE_TO_LOCATION:
+
+	navigate_to_location_code_iterative();
+
+	msg.data = "navigate_to_location";
+	if(navigate_to_location_2_aproach_object())
+	{
+
+	deactivateAllDeps();
+
+	state_ = APROACH_OBJECT;
+	state_ts_ = ros::Time::now();
+
+	aproach_object_activateDeps();
+	aproach_object_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
+	case INIT:
+
+	Init_code_iterative();
+
+	msg.data = "Init";
+	if(Init_2_navigate_to_init())
+	{
+
+	deactivateAllDeps();
+
+	state_ = NAVIGATE_TO_INIT;
+	state_ts_ = ros::Time::now();
+
+	navigate_to_init_activateDeps();
+	navigate_to_init_code_once();
+	}
+	state_pub_.publish(msg);
+	break;
+
 
     }
   }
@@ -248,12 +267,12 @@ restaurant_HFSM::understand_object_activateDeps()
 }
 
 void
-restaurant_HFSM::aproach_object_activateDeps()
+restaurant_HFSM::End_activateDeps()
 {
 }
 
 void
-restaurant_HFSM::navigate_to_location_activateDeps()
+restaurant_HFSM::aproach_object_activateDeps()
 {
 }
 
@@ -263,17 +282,7 @@ restaurant_HFSM::understand_location_activateDeps()
 }
 
 void
-restaurant_HFSM::Init_activateDeps()
-{
-}
-
-void
 restaurant_HFSM::navigate_to_init_activateDeps()
-{
-}
-
-void
-restaurant_HFSM::End_activateDeps()
 {
 }
 
@@ -284,6 +293,21 @@ restaurant_HFSM::aproach_person_activateDeps()
 
 void
 restaurant_HFSM::navigate_to_end_activateDeps()
+{
+}
+
+void
+restaurant_HFSM::searching_person_activateDeps()
+{
+}
+
+void
+restaurant_HFSM::navigate_to_location_activateDeps()
+{
+}
+
+void
+restaurant_HFSM::Init_activateDeps()
 {
 }
 

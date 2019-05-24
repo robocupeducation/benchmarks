@@ -68,16 +68,20 @@ public:
 	//void navigate_to_location_code_once();
 	//void aproach_object_code_iterative();
 	//void aproach_object_code_once();
+  //void searching_person_code_iterative();
+	//void searching_person_code_once();
 	void aproach_person_code_iterative();
 	void aproach_person_code_once();
 
-  bool navigate_to_init_2_aproach_person();
 	//bool navigate_to_location_2_aproach_object();
 	//bool understand_object_2_understand_location();
 	bool aproach_person_2_understand_object();
 	//bool aproach_object_2_navigate_to_end();
 	bool Init_2_navigate_to_init();
 	//bool understand_location_2_navigate_to_location();
+	bool searching_person_2_aproach_person();
+	bool navigate_to_init_2_searching_person();
+
 
   //void End_code_iterative();
 	//void End_code_once();
