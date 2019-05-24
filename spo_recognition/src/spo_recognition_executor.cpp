@@ -101,7 +101,7 @@ void SPORecognition_executor::aproach_person_code_once()
 void SPORecognition_executor::object_recognition_code_iterative()
 {
   if(objArrived){
-    talk(object);
+    talk("I found the " + object);
   }
   objArrived = false;
 }
@@ -169,7 +169,6 @@ void SPORecognition_executor::stopObjCb(const std_msgs::Empty::ConstPtr& msg)
 void SPORecognition_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
 {
   dist_to_person = msg->dist;
-  ROS_WARN("Te cace");
   removeDependency("mover_publisher");
   personSaw = true;
   //personDataSub.shutdown();
