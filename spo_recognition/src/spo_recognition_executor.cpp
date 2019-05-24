@@ -146,8 +146,8 @@ bool SPORecognition_executor::turn_back_2_aproach_person()
 
 bool SPORecognition_executor::aproach_person_2_answer_question()
 {
-  //return dist_to_person >= minDist && dist_to_person <= maxDist;
-  return true;
+  return dist_to_person >= minDist && dist_to_person <= maxDist;
+  //return true;
 }
 
 bool SPORecognition_executor::answer_question_2_object_recognition()
