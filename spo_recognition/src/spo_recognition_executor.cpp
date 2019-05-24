@@ -102,6 +102,7 @@ void SPORecognition_executor::object_recognition_code_iterative()
 {
   if(objArrived){
     talk("I found the " + object);
+    ROS_WARN("I found the %s", object.c_str());
   }
   objArrived = false;
 }
@@ -110,6 +111,8 @@ void SPORecognition_executor::object_recognition_code_once()
   ROS_WARN("State Object_Recognition");
   removeDependency("main_DialogInterface");
   answerFinished = false;
+  std::string str = "I am going to detect the object";
+  talk(str);
   addDependency("Objects_Detector");
 }
 
@@ -123,6 +126,8 @@ void SPORecognition_executor::answer_question_code_once()
   ROS_WARN("State Answer_Questions");
   removeDependency("Person_Followed_Publisher");
   removeDependency("PD_Algorithm");
+  std::string str = "Ask me something";
+  talk(str);
   addDependency("main_DialogInterface");
 }
 
