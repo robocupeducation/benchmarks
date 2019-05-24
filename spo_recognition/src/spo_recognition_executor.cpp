@@ -55,6 +55,7 @@ void SPORecognition_executor::init_knowledge()
   objArrived = false;
   answerFinished = false;
   objRecogFinished = false;
+  personSaw = false;
 }
 
 void SPORecognition_executor::Init_code_once()
@@ -75,6 +76,7 @@ void SPORecognition_executor::turn_back_code_once()
   // tomamos la marca de tiempo
   beginTime = time(NULL);
   addDependency("mover_publisher");
+  addDependency("Person_Followed_Publisher");
 }
 
 void SPORecognition_executor::turn_back_code_iterative()
@@ -91,8 +93,8 @@ void SPORecognition_executor::aproach_person_code_iterative()
 void SPORecognition_executor::aproach_person_code_once()
 {
   ROS_WARN("State Aproach_Person");
-  removeDependency("mover_publisher");
-  addDependency("Person_Followed_Publisher");
+  //removeDependency("mover_publisher");
+  //addDependency("Person_Followed_Publisher");
   addDependency("PD_Algorithm");
 }
 
@@ -138,7 +140,8 @@ bool SPORecognition_executor::Init_2_turn_back()
 bool SPORecognition_executor::turn_back_2_aproach_person()
 {
   //checkear cuanto tiempo ha pasado desde que le mandamos que girara la primera vez
-  return finishTime - beginTime >= 4.5;
+  //return finishTime - beginTime >= 4.5;
+  return personSaw;
 }
 
 bool SPORecognition_executor::aproach_person_2_answer_question()
@@ -149,8 +152,8 @@ bool SPORecognition_executor::aproach_person_2_answer_question()
 
 bool SPORecognition_executor::answer_question_2_object_recognition()
 {
-  //return answerFinished;
-  return true;
+  return answerFinished;
+  //return true;
 }
 
 bool SPORecognition_executor::object_recognition_2_End()
@@ -166,6 +169,9 @@ void SPORecognition_executor::stopObjCb(const std_msgs::Empty::ConstPtr& msg)
 void SPORecognition_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
 {
   dist_to_person = msg->dist;
+  ROS_WARN("Te cace");
+  removeDependency("mover_publisher");
+  personSaw = true;
   //personDataSub.shutdown();
 }
 

@@ -86,7 +86,7 @@ private:
   ros::Subscriber personDataSub, objectSub, answerFinishedSub, objRecogFinishedSub;
   time_t beginTime, finishTime;
   std::string object;
-  bool objArrived, answerFinished, objRecogFinished;
+  bool objArrived, answerFinished, objRecogFinished, personSaw;
 };
 
 #endif
