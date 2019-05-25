@@ -1,0 +1,15 @@
+<component id="open_HFSM">
+ <state x="-590" y="-11" id="navigate_to_loc" initial="false"/>
+ <state x="-697" y="-216" id="understand_excludes_nodes" initial="false"/>
+ <state x="-793" y="-7" id="rescue_teddy_bear" initial="false"/>
+ <state x="-512" y="-215" id="get_dijkstra" initial="false"/>
+ <state x="-1058" y="-214" id="Init" initial="true"/>
+ <state x="-872" y="-216" id="understand_goal" initial="false"/>
+ <state x="-1005" y="-5" id="return_to_home" initial="false"/>
+ <transition dst="get_dijkstra" src="understand_excludes_nodes"/>
+ <transition dst="navigate_to_loc" src="get_dijkstra"/>
+ <transition dst="understand_excludes_nodes" src="understand_goal"/>
+ <transition dst="return_to_home" src="rescue_teddy_bear"/>
+ <transition dst="understand_goal" src="Init"/>
+ <transition dst="rescue_teddy_bear" src="navigate_to_loc"/>
+</component>
