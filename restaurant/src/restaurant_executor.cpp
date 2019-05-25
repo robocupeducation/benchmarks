@@ -50,7 +50,7 @@ restaurant_executor::restaurant_executor()
   navigate_pub = nh_.advertise<geometry_msgs::PoseStamped>("/navigate_to", 1);
   loc_reached_sub = nh_.subscribe("/navigate_to/goal_reached", 1, &restaurant_executor::targetReachedCb, this);
   personDataSub = nh_.subscribe("/person_followed_data", 1, &restaurant_executor::personDataCb, this);
-  objectSub = nh_.subscribe("/object_detected", 1, &restaurant_executor::objectCb, this);
+  //objectSub = nh_.subscribe("/object_detected", 1, &restaurant_executor::objectCb, this);
   objRecogFinishedSub = nh_.subscribe("/stop_obj_recog", 1, &restaurant_executor::stopObjCb, this);
   next_location_sub = nh_.subscribe("/locations", 1, &restaurant_executor::nextLocationCb, this);
   ordersCb = nh_.subscribe("/orders", 1, &restaurant_executor::orderCb, this);
@@ -65,7 +65,7 @@ void restaurant_executor::init_knowledge()
   addMapElement(0.0, 0.0, 0.0, -3.1416 / 2.0, "entrance");
   addMapElement(1.8, -1.9, 0.0, 3.1416 / 2.0, "kitchen");
   addMapElement(1.45, 1.8, 0.0, 3.1416 / 2.0, "living room");
-  addMapElement(4.23, 0.24, 0.0, 3.1416 / 2.0, "studio");
+  addMapElement(4.23, 0.24, 0.0, -3.1416 / 2.0, "studio");
 }
 
 void restaurant_executor::Init_code_once()
@@ -191,25 +191,27 @@ bool restaurant_executor::Init_2_navigate_to_init()
 
 bool restaurant_executor::searching_person_2_aproach_person()
 {
-  //return true;
+  return true;
+  /*
   if (personSaw)
   {
     personSaw = false;
     return true;
   }
   return false;
+  */
 }
 
 bool restaurant_executor::navigate_to_init_2_searching_person()
 {
-  //return true;
-  return loc_reached;
+  return true;
+  //return loc_reached;
 }
 
 bool restaurant_executor::aproach_person_2_understand_object()
 {
-  //return true;
-  return personSaw;
+  return true;
+  //return personSaw;
 }
 
 bool restaurant_executor::understand_object_2_understand_location()
@@ -224,14 +226,14 @@ bool restaurant_executor::understand_location_2_navigate_to_location()
 
 bool restaurant_executor::navigate_to_location_2_aproach_object()
 {
-  //return true;
-  return loc_reached;
+  return true;
+  //return loc_reached;
 }
 
 bool restaurant_executor::aproach_object_2_navigate_to_end()
 {
-  //return true;
-  return personSaw;
+  return true;
+  //return personSaw;
 }
 
 bool restaurant_executor::navigate_to_end_2_End()
@@ -257,15 +259,10 @@ void restaurant_executor::stopObjCb(const std_msgs::Empty::ConstPtr& msg)
   objRecogFinished = true;
 }
 
-void restaurant_executor::objectCb(const std_msgs::String::ConstPtr& msg)
-{
-  object = msg->data;
-  objArrived = true;
-}
-
 void restaurant_executor::orderCb(const std_msgs::String::ConstPtr& msg)
 {
   object = msg->data;
+  ROS_WARN("Me ha llegado el objeto");
   objUnderstood = true;
 }
 

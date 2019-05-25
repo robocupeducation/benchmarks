@@ -64,10 +64,19 @@ class Arch():
 
 class Solver():
     def __init__(self):
-        self.solvePublisher = rospy.Publisher("/solve", String, queue_size = 1)
-        self.inputSubscriber = rospy.inputSubscriber("/dijsktra_inp", String, inputCallback)
+        self.solvePublisher = rospy.Publisher('/solve', String, queue_size = 1)
+        self.inputSubscriber = rospy.Subscriber("/dijsktra_inp", String, self.inputCallback)
+        #Lista que guarda los nodos que necesito saber: El primero es el destino y
+        #el resto son excluyentes
+        self.nodesList = []
 
-    def dijsktra(self,graph, initial, end):
+    def inputCallback(self, data):
+        if(data.data != "finish"):
+            self.nodesList.append(data.data)
+        else:
+            self.dijstra()
+    #CAMBIAR EL CODIGO DE ESTE METODO
+    def dijsktra(self):
         # shortest paths is a dict of nodes
         # whose value is a tuple of (previous node, weight)
         shortest_paths = {initial: (None, 0)}
@@ -104,6 +113,7 @@ class Solver():
         path = path[::-1]
         print("[Dijkstra]: " + str(path))
         rate = rospy.Rate(5)
+
         for location in path:
             rate.sleep()
             self.solvePublisher.publish(location)
@@ -166,8 +176,9 @@ for edge in edges:
 try:
     rospy.init_node('dijstrasolve')
     solver = Solver()
+    rospy.spin()
     ## Start point and endpoint in sys.argv
-    solver.dijsktra(graph, sys.argv[1],sys.argv[2])
+    #solver.dijsktra(graph, sys.argv[1],sys.argv[2])
     # print(dijsktra(graph, sys.argv[1],sys.argv[2]))
 except rospy.ROSInterruptException:
     pass

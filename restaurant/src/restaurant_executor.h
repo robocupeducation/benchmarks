@@ -93,7 +93,6 @@ public:
   void targetReachedCb(const std_msgs::Empty::ConstPtr& msg);
   void personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg);
   void stopObjCb(const std_msgs::Empty::ConstPtr& msg);
-  void objectCb(const std_msgs::String::ConstPtr& msg);
   void nextLocationCb(const std_msgs::String::ConstPtr& msg);
   void orderCb(const std_msgs::String::ConstPtr& msg);
 

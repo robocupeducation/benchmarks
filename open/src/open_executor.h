@@ -46,6 +46,8 @@
 #include <string>
 #include <ctime>
 #include "follow_person/PersonFollowedData.h"
+#include "geometry_msgs/PoseStamped.h"
+#include <tf2/LinearMath/Quaternion.h>
 
 class Open_executor : public bica::open_HFSM
 {
@@ -73,8 +75,13 @@ public:
   bool Init_2_understand_goal();
   //bool navigate_to_loc_2_rescue_teddy_bear();
 
+  void addMapElement(float px, float py, float pz, float orientation, std::string key);
+  void pathSolverCb(const std_msgs::String::ConstPtr& msg);
+
 private:
   ros::NodeHandle nh_;
+  ros::Subscriber pathSolver;
+  std::map<std::string, geometry_msgs::PoseStamped> locations_map;
 };
 
 #endif
