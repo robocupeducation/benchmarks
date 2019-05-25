@@ -64,7 +64,8 @@ class Arch():
 
 class Solver():
     def __init__(self):
-        self.solvePublisher = rospy.Publisher("/solve",String,queue_size = 10)
+        self.solvePublisher = rospy.Publisher("/solve", String, queue_size = 1)
+        self.inputSubscriber = rospy.inputSubscriber("/dijsktra_inp", String, inputCallback)
 
     def dijsktra(self,graph, initial, end):
         # shortest paths is a dict of nodes
@@ -106,12 +107,14 @@ class Solver():
         for location in path:
             rate.sleep()
             self.solvePublisher.publish(location)
+            rate.sleep()
+        self.solvePublisher.publish("no more points")
 
 graph = Graph()
 
 arch1 = Arch('A', 'B') # xAB
-arch2 = Arch('A', 'E') # xAE
-arch3 = Arch('A', 'D') # xAD
+arch2 = Arch('A', 'E', 2) # xAE
+arch3 = Arch('A', 'D', 3 ) # xAD
 arch4 = Arch('B', 'C') # xBC
 arch5 = Arch('B', 'E') # xBE
 arch6 = Arch('D', 'C') # xDC
