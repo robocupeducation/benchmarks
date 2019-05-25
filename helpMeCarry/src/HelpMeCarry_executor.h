@@ -47,6 +47,7 @@
 #include "HelpMeCarry_HFSM.h"
 #include <string>
 #include <map>
+#include "follow_person/PersonFollowedData.h"
 
 class HelpMeCarry_executor : public bica::HelpMeCarry_HFSM
 {
@@ -54,7 +55,6 @@ public:
   //constructor
   HelpMeCarry_executor();
 
-  //bool update();
   void init_knowledge();
   void navigate_to_loc_code_iterative();
 	void navigate_to_loc_code_once();
@@ -84,16 +84,21 @@ public:
   void orderCb(const std_msgs::String::ConstPtr& msg);
   void addMapElement(float px, float py, float pz, float orientation, std::string key);
   void errorCb(const std_msgs::String::ConstPtr& msg);
+  void personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg);
   void talk(std::string str);
+  //void faceDetCb(const std_msgs::Empty::ConstPtr& msg);
 
 private:
   ros::NodeHandle nh_;
   ros::Publisher talk_pub, navigate_pub;
-  ros::Subscriber loc_reached_sub, next_location_sub, orders_sub, errorsSub;
+  ros::Subscriber loc_reached_sub, next_location_sub, orders_sub, errorsSub,
+                    personDataSub, facesFlagSub;
   std::map<std::string, geometry_msgs::PoseStamped> locations_map;
   std::string nextLocation;
   int i;
-  bool loc_reached, understanding_loc2go_loc, follow_person2understanding_location;
+  float dist_to_person;
+  bool loc_reached, understanding_loc2go_loc, follow_person2understanding_location,
+        personSaw;
 };
 
 #endif

@@ -43,12 +43,14 @@ HelpMeCarry_executor::HelpMeCarry_executor()
   loc_reached = 0;
   understanding_loc2go_loc = 0;
   follow_person2understanding_location = 0;
+  personSaw = 0;
   talk_pub = nh_.advertise<std_msgs::String>("/talk", 1);
   navigate_pub = nh_.advertise<geometry_msgs::PoseStamped>("/navigate_to", 1);
   loc_reached_sub = nh_.subscribe("/navigate_to/goal_reached", 1, &HelpMeCarry_executor::targetReachedCb, this);
   orders_sub = nh_.subscribe("/commands", 1, &HelpMeCarry_executor::orderCb, this);
   next_location_sub = nh_.subscribe("/locations", 1, &HelpMeCarry_executor::nextLocationCb, this);
   errorsSub = nh_.subscribe("/errors", 1, &HelpMeCarry_executor::errorCb, this);
+  personDataSub = nh_.subscribe("/person_followed_data", 1, &HelpMeCarry_executor::personDataCb, this);
   init_knowledge();
 }
 
@@ -56,9 +58,10 @@ HelpMeCarry_executor::HelpMeCarry_executor()
 void HelpMeCarry_executor::init_knowledge()
 {
   // definir un geometry_msgs::PoseStamped como punto init
-  addMapElement(0.73, 2.35, 0.0, -3.1416 / 2.0, "init");
-  addMapElement(0.95, -1.44, 0.0, -3.1416, "kitchen");
-  addMapElement(3.11, 1.33, 0.0, 3.1416 / 2.0, "bedroom");
+  addMapElement(0.0, 0.0, 0.0, -3.1416 / 2.0, "entrance");
+  addMapElement(1.74, -1.84, 0.0, 3.1416, "kitchen");
+  addMapElement(1.45, 1.8, 0.0, 0.0, "living room");
+  addMapElement(4.23, 0.24, 0.0, -3.1416 / 2.0, "studio");
 
   // definir un map que asocie lugares a puntos de la casa geometry_msgs::PoseStamped y rellenar ese map
 
@@ -66,12 +69,16 @@ void HelpMeCarry_executor::init_knowledge()
 
 void HelpMeCarry_executor::navigate_to_loc_code_once()
 {
+  loc_reached = 0;
+  ROS_WARN("State Navigate to Location");
   removeDependency("location_DialogInterface");
   understanding_loc2go_loc = 0;
+  std::string str = "I am going to the " + nextLocation;
+  talk(str);
 }
 void HelpMeCarry_executor::navigate_to_loc_code_iterative()
 {
-  ROS_WARN("Navigate to Location");
+  ROS_WARN("Going to %s\n", nextLocation.c_str());
   std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
   it = locations_map.find(nextLocation);
   navigate_pub.publish(it->second);
@@ -84,17 +91,24 @@ void HelpMeCarry_executor::searching_person_code_iterative()
 
 void HelpMeCarry_executor::searching_person_code_once()
 {
-
+  loc_reached = 0;
+  ROS_WARN("State Searching_Person");
+  std::string str = "I am looking for you";
+  talk(str);
+  ROS_WARN("State Searching_Person done");
+  addDependency("mover_publisher");
+  addDependency("Person_Followed_Publisher");
 }
 
 void HelpMeCarry_executor::follow_person_code_once()
 {
-  loc_reached = 0;
   ROS_WARN("Follow Person");
-  std::string str = "I am ready to follow you. Keep in front of me, please";
+  std::string str = "I am ready to follow you";
   talk(str);
-  addDependency("PD_Algorithm");
+  removeDependency("mover_publisher");
   addDependency("Person_Followed_Publisher");
+  addDependency("PD_Algorithm");
+  //addDependency("Person_Followed_Publisher");
   addDependency("commands_DialogInterface");
 }
 
@@ -104,6 +118,7 @@ void HelpMeCarry_executor::Init_code_once()
   //Say that Help me Carry starts
   std::string str = "Help me Carry Starts";
   talk(str);
+  ROS_WARN("Init fiinished");
 }
 
 void HelpMeCarry_executor::navigate_to_init_code_once()
@@ -115,14 +130,21 @@ void HelpMeCarry_executor::navigate_to_init_code_iterative()
 {
   ROS_WARN("navigate_to_init_code_iterative");
   std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
-  it = locations_map.find("init");
-  ROS_INFO("%f %f", it->second.pose.position.x, it->second.pose.position.y);
-  navigate_pub.publish(it->second);
+  it = locations_map.find("studio");
+  if(it != locations_map.end()){
+    ROS_INFO("%f %f", it->second.pose.position.x, it->second.pose.position.y);
+    navigate_pub.publish(it->second);
+  }
+  else
+  {
+    ROS_ERROR("[navigate_to_init_code_iterative] Point doen's founded");
+  }
+
 }
 
 void HelpMeCarry_executor::understanding_next_location_code_once()
 {
-  ROS_WARN("Undestanding Next Location");
+  ROS_WARN("State Undestanding Next Location");
   removeDependency("PD_Algorithm");
   removeDependency("Person_Followed_Publisher");
   removeDependency("commands_DialogInterface");
@@ -150,13 +172,13 @@ bool HelpMeCarry_executor::Init_2_navigate_to_init()
 
 bool HelpMeCarry_executor::navigate_to_init_2_searching_person()
 {
-  //return loc_reached;
-  return true;
+  return loc_reached;
+  //return true;
 }
 
 bool HelpMeCarry_executor::searching_person_2_follow_person()
 {
-  return false;
+  return personSaw;
 }
 
 bool HelpMeCarry_executor::understanding_next_location_2_navigate_to_loc()
@@ -171,6 +193,7 @@ bool HelpMeCarry_executor::follow_person_2_understanding_next_location()
 
 bool HelpMeCarry_executor::navigate_to_loc_2_End()
 {
+  //return true;
   return loc_reached;
 }
 
@@ -182,8 +205,12 @@ void HelpMeCarry_executor::targetReachedCb(const std_msgs::Empty::ConstPtr& msg)
 void HelpMeCarry_executor::nextLocationCb(const std_msgs::String::ConstPtr& msg)
 {
   nextLocation = msg->data;
-  understanding_loc2go_loc = 1;
-  next_location_sub.shutdown();
+  std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
+  it = locations_map.find(nextLocation);
+  if(it != locations_map.end()){
+    understanding_loc2go_loc = 1;
+    next_location_sub.shutdown();
+  }
 }
 void HelpMeCarry_executor::orderCb(const std_msgs::String::ConstPtr& msg)
 {
@@ -197,11 +224,24 @@ void HelpMeCarry_executor::errorCb(const std_msgs::String::ConstPtr& msg)
 {
   std::string str = msg->data;
   if(str == "unknown command"){
-    str = "I am going to the kitchen";
+    str = "I dont unsdertand you, so I am going to the kitchen";
+    talk(str);
+    understanding_loc2go_loc = 1;
+    nextLocation = "kitchen";
+  }else{
+    str = "There is no network, so i cannot understand you. I am going to the kitchen";
     talk(str);
     understanding_loc2go_loc = 1;
     nextLocation = "kitchen";
   }
+}
+
+void HelpMeCarry_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
+{
+  dist_to_person = msg->dist;
+  removeDependency("mover_publisher");
+  personSaw = 1;
+  //personDataSub.shutdown();
 }
 
 void HelpMeCarry_executor::addMapElement(float px, float py, float pz, float orientation, std::string key)

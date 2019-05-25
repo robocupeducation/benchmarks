@@ -47,6 +47,7 @@
 #include "restaurant_HFSM.h"
 #include <string>
 #include <map>
+#include "follow_person/PersonFollowedData.h"
 
 class restaurant_executor : public bica::restaurant_HFSM
 {
@@ -55,48 +56,58 @@ public:
   restaurant_executor();
   void init_knowledge();
   //void understand_object_code_iterative();
-	//void understand_object_code_once();
-	//void navigate_to_end_code_iterative();
-	//void navigate_to_end_code_once();
+	void understand_object_code_once();
+	void navigate_to_end_code_iterative();
+	void navigate_to_end_code_once();
 	//void Init_code_iterative();
 	void Init_code_once();
 	//void understand_location_code_iterative();
-	//void understand_location_code_once();
+	void understand_location_code_once();
 	void navigate_to_init_code_iterative();
 	void navigate_to_init_code_once();
-	//void navigate_to_location_code_iterative();
-	//void navigate_to_location_code_once();
+	void navigate_to_location_code_iterative();
+	void navigate_to_location_code_once();
 	//void aproach_object_code_iterative();
-	//void aproach_object_code_once();
+	void aproach_object_code_once();
   //void searching_person_code_iterative();
-	//void searching_person_code_once();
-	void aproach_person_code_iterative();
+	void searching_person_code_once();
+	//void aproach_person_code_iterative();
 	void aproach_person_code_once();
 
-	//bool navigate_to_location_2_aproach_object();
-	//bool understand_object_2_understand_location();
+	bool navigate_to_location_2_aproach_object();
+	bool understand_object_2_understand_location();
 	bool aproach_person_2_understand_object();
-	//bool aproach_object_2_navigate_to_end();
+	bool aproach_object_2_navigate_to_end();
 	bool Init_2_navigate_to_init();
-	//bool understand_location_2_navigate_to_location();
+	bool understand_location_2_navigate_to_location();
 	bool searching_person_2_aproach_person();
 	bool navigate_to_init_2_searching_person();
 
 
   //void End_code_iterative();
-	//void End_code_once();
-	//bool navigate_to_end_2_End();
+	void End_code_once();
+	bool navigate_to_end_2_End();
 
   void talk(std::string str);
   void addMapElement(float px, float py, float pz, float orientation, std::string key);
   void targetReachedCb(const std_msgs::Empty::ConstPtr& msg);
+  void personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg);
+  void stopObjCb(const std_msgs::Empty::ConstPtr& msg);
+  void objectCb(const std_msgs::String::ConstPtr& msg);
+  void nextLocationCb(const std_msgs::String::ConstPtr& msg);
+  void orderCb(const std_msgs::String::ConstPtr& msg);
 
 private:
   ros::NodeHandle nh_;
   ros::Publisher talk_pub, navigate_pub;
-  ros::Subscriber loc_reached_sub;
+  ros::Subscriber loc_reached_sub, personDataSub, next_location_sub, objectSub, objRecogFinishedSub,
+        ordersCb;
   std::map<std::string, geometry_msgs::PoseStamped> locations_map;
-  bool loc_reached;
+  int maxDist;
+  float dist_to_person;
+  std::string object, nextLocation;
+  bool loc_reached, personSaw, objRecogFinished, objArrived, understanding_loc2go_loc,
+        objUnderstood;
 };
 
 #endif

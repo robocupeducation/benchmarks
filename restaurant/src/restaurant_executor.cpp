@@ -39,34 +39,49 @@
 
 restaurant_executor::restaurant_executor()
 {
-  loc_reached = 0;
+  loc_reached = false;
+  maxDist = 1200.0;
+  personSaw = false;
+  objRecogFinished = false;
+  objArrived = false;
+  understanding_loc2go_loc = false;
+  objUnderstood = false;
+  talk_pub = nh_.advertise<std_msgs::String>("/talk", 1);
   navigate_pub = nh_.advertise<geometry_msgs::PoseStamped>("/navigate_to", 1);
   loc_reached_sub = nh_.subscribe("/navigate_to/goal_reached", 1, &restaurant_executor::targetReachedCb, this);
-
+  personDataSub = nh_.subscribe("/person_followed_data", 1, &restaurant_executor::personDataCb, this);
+  objectSub = nh_.subscribe("/object_detected", 1, &restaurant_executor::objectCb, this);
+  objRecogFinishedSub = nh_.subscribe("/stop_obj_recog", 1, &restaurant_executor::stopObjCb, this);
+  next_location_sub = nh_.subscribe("/locations", 1, &restaurant_executor::nextLocationCb, this);
+  ordersCb = nh_.subscribe("/orders", 1, &restaurant_executor::orderCb, this);
   init_knowledge();
 }
 
 void restaurant_executor::init_knowledge()
 {
   // definir un geometry_msgs::PoseStamped como punto init
-  addMapElement(0.73, 2.35, 0.0, -3.1416 / 2.0, "init");
-  addMapElement(0.95, -1.44, 0.0, -3.1416, "kitchen");
-  addMapElement(3.11, 1.33, 0.0, 3.1416 / 2.0, "bedroom");
+  //MODIFICAR EL PUNTO INIT
+  //addMapElement(0.0, 0.0, 0.0, -3.1416 / 2.0, "init");
+  addMapElement(0.0, 0.0, 0.0, -3.1416 / 2.0, "entrance");
+  addMapElement(1.8, -1.9, 0.0, 3.1416 / 2.0, "kitchen");
+  addMapElement(1.45, 1.8, 0.0, 3.1416 / 2.0, "living room");
+  addMapElement(4.23, 0.24, 0.0, 3.1416 / 2.0, "studio");
 }
 
 void restaurant_executor::Init_code_once()
 {
   ROS_WARN("State Init");
   //Say that Restaurant starts
-  std::string str = "restaurant Starts";
+  std::string str = "Restaurant Starts";
   talk(str);
 }
 
 void restaurant_executor::navigate_to_init_code_iterative()
 {
   std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
-  it = locations_map.find("init");
-  ROS_INFO("%f %f", it->second.pose.position.x, it->second.pose.position.y);
+  it = locations_map.find("studio");
+  //REVISAR QUE NO HAYA NULL POINTERS
+  //ROS_INFO("%f %f", it->second.pose.position.x, it->second.pose.position.y);
   navigate_pub.publish(it->second);
 }
 
@@ -75,16 +90,98 @@ void restaurant_executor::navigate_to_init_code_once()
   ROS_WARN("State Navigate_to_init");
 }
 
-void restaurant_executor::aproach_person_code_iterative()
-{
-
-}
 void restaurant_executor::aproach_person_code_once()
 {
-  ROS_WARN("State Aproach_Person");
-  loc_reached = 0;
+  ROS_WARN("State Aproach person");
+  //Anadir dependencia con person followed data
+  addDependency("PD_Algorithm");
+}
+void restaurant_executor::searching_person_code_once()
+{
+  ROS_WARN("State Searching Person");
+  loc_reached = false;
+  std::string str = "I am looking for you";
+  talk(str);
+  addDependency("Person_Followed_Publisher");
+}
+
+void restaurant_executor::understand_object_code_once()
+{
+  ROS_WARN("State Understand Object");
+  personSaw = false;
+  addDependency("Person_Followed_Publisher");
+  removeDependency("PD_Algorithm");
+  std::string str = "Do you want something?";
+  talk(str);
+  addDependency("order_DialogInterface");
+}
+
+void restaurant_executor::understand_location_code_once()
+{
+  ROS_WARN("The object is %s\n",
+   object.c_str());
+  ROS_WARN("understand location");
+  removeDependency("order_DialogInterface");
+  objUnderstood = false;
+  std::string str = "So you want the " + object + ". Where I have to go?";
+  talk(str);
+  addDependency("location_DialogInterface");
+}
+
+void restaurant_executor::navigate_to_location_code_once()
+{
+  ROS_WARN("State navigate to location");
+  removeDependency("location_DialogInterface");
+  removeDependency("Person_Followed_Publisher");
+  understanding_loc2go_loc = false;
+  loc_reached = false;
+  std::string str = "I am going to the " + nextLocation;
+  talk(str);
+}
+
+void restaurant_executor::navigate_to_location_code_iterative()
+{
+  std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
+  it = locations_map.find(nextLocation);
+  if (it!=locations_map.end())
+  {
+    ROS_WARN("Going to %s\n", nextLocation.c_str());
+    navigate_pub.publish(it->second);
+  }
+}
+
+void restaurant_executor::navigate_to_end_code_once()
+{
+  ROS_WARN("State Navigate_to_end");
+  removeDependency("Person_Followed_Publisher");
+  removeDependency("PD_Algorithm");
+  std::string str = "I founded the " + object;
+  ROS_WARN("%s",str.c_str());
+  talk(str);
+}
+
+void restaurant_executor::navigate_to_end_code_iterative()
+{
+  navigate_to_init_code_iterative();
+}
+
+
+void restaurant_executor::aproach_object_code_once()
+{
+  loc_reached = false;
+  ROS_WARN("State Aproach object");
+  std::string str = "I am going to approach";
+  talk(str);
   addDependency("Person_Followed_Publisher");
   addDependency("PD_Algorithm");
+}
+
+void restaurant_executor::End_code_once()
+{
+  loc_reached = false;
+  ROS_WARN("State End");
+  std::string str = "Here you have the " + object;
+  talk(str);
 }
 
 bool restaurant_executor::Init_2_navigate_to_init()
@@ -94,29 +191,93 @@ bool restaurant_executor::Init_2_navigate_to_init()
 
 bool restaurant_executor::searching_person_2_aproach_person()
 {
+  //return true;
+  if (personSaw)
+  {
+    personSaw = false;
+    return true;
+  }
   return false;
 }
 
 bool restaurant_executor::navigate_to_init_2_searching_person()
 {
+  //return true;
   return loc_reached;
 }
 
 bool restaurant_executor::aproach_person_2_understand_object()
 {
-
+  //return true;
+  return personSaw;
 }
 
-void restaurant_executor::talk(std::string str)
+bool restaurant_executor::understand_object_2_understand_location()
 {
-  std_msgs::String msg;
-  msg.data = str;
-  talk_pub.publish(msg);
+  return objUnderstood;
+}
+
+bool restaurant_executor::understand_location_2_navigate_to_location()
+{
+  return understanding_loc2go_loc;
+}
+
+bool restaurant_executor::navigate_to_location_2_aproach_object()
+{
+  //return true;
+  return loc_reached;
+}
+
+bool restaurant_executor::aproach_object_2_navigate_to_end()
+{
+  //return true;
+  return personSaw;
+}
+
+bool restaurant_executor::navigate_to_end_2_End()
+{
+  return loc_reached;
+}
+
+void restaurant_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
+{
+  dist_to_person = msg->dist;
+  //removeDependency("mover_publisher");
+  personSaw = true;
 }
 
 void restaurant_executor::targetReachedCb(const std_msgs::Empty::ConstPtr& msg)
 {
-  loc_reached = 1;
+  ROS_WARN("targetReachedCb");
+  loc_reached = true;
+}
+
+void restaurant_executor::stopObjCb(const std_msgs::Empty::ConstPtr& msg)
+{
+  objRecogFinished = true;
+}
+
+void restaurant_executor::objectCb(const std_msgs::String::ConstPtr& msg)
+{
+  object = msg->data;
+  objArrived = true;
+}
+
+void restaurant_executor::orderCb(const std_msgs::String::ConstPtr& msg)
+{
+  object = msg->data;
+  objUnderstood = true;
+}
+
+void restaurant_executor::nextLocationCb(const std_msgs::String::ConstPtr& msg)
+{
+  nextLocation = msg->data;
+  std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
+  it = locations_map.find(nextLocation);
+  if(it != locations_map.end()){
+    understanding_loc2go_loc = true;
+    next_location_sub.shutdown();
+  }
 }
 
 void restaurant_executor::addMapElement(float px, float py, float pz, float orientation, std::string key)
@@ -134,4 +295,11 @@ void restaurant_executor::addMapElement(float px, float py, float pz, float orie
   loc.pose.orientation.w = q[3];
 
   locations_map[key] = loc;
+}
+
+void restaurant_executor::talk(std::string str)
+{
+  std_msgs::String msg;
+  msg.data = str;
+  talk_pub.publish(msg);
 }

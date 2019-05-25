@@ -1,6 +1,6 @@
 <launch>
   <arg name = "tbm" default="spo"/>
-  <arg name = "pathToRosbag" value = "/home/jgines/RobocupEducation_date_$(arg tbm).bag"/>
-  <node pkg="rosbag" type="record" name="rosbag_erl"
+  <arg name = "pathToRosbag" value = "$(env HOME)/RobocupEducation_date_$(arg tbm).bag"/>
+  <node pkg="rosbag" type="record" name="rosbag_robocup"
        args="record -a -O $(arg pathToRosbag)" />
 </launch>

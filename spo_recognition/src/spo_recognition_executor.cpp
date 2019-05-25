@@ -64,6 +64,8 @@ void SPORecognition_executor::Init_code_once()
   //Say that Help me Carry starts
   std::string str = "Speech Object and Person Recognition starts";
   talk(str);
+
+  //beginTime = time(NULL);
 }
 
 void SPORecognition_executor::Init_code_iterative()
@@ -73,15 +75,12 @@ void SPORecognition_executor::Init_code_iterative()
 
 void SPORecognition_executor::turn_back_code_once()
 {
-  // tomamos la marca de tiempo
-  beginTime = time(NULL);
   addDependency("mover_publisher");
-  addDependency("Person_Followed_Publisher");
+  beginTime = time(NULL);
 }
 
 void SPORecognition_executor::turn_back_code_iterative()
 {
-  //publicar para que el robot gire
   ROS_WARN("State turn_back_code_iterative");
   finishTime = time(NULL);
 }
@@ -93,8 +92,8 @@ void SPORecognition_executor::aproach_person_code_iterative()
 void SPORecognition_executor::aproach_person_code_once()
 {
   ROS_WARN("State Aproach_Person");
-  //removeDependency("mover_publisher");
-  //addDependency("Person_Followed_Publisher");
+  removeDependency("mover_publisher");
+  addDependency("Person_Followed_Publisher");
   addDependency("PD_Algorithm");
 }
 
@@ -122,7 +121,6 @@ void SPORecognition_executor::answer_question_code_iterative()
 }
 void SPORecognition_executor::answer_question_code_once()
 {
-  //No se lo que tengo que hacer
   ROS_WARN("State Answer_Questions");
   removeDependency("Person_Followed_Publisher");
   removeDependency("PD_Algorithm");
@@ -144,21 +142,18 @@ bool SPORecognition_executor::Init_2_turn_back()
 
 bool SPORecognition_executor::turn_back_2_aproach_person()
 {
-  //checkear cuanto tiempo ha pasado desde que le mandamos que girara la primera vez
-  //return finishTime - beginTime >= 4.5;
-  return personSaw;
+  //return personSaw;
+  return finishTime - beginTime >= 7.0;
 }
 
 bool SPORecognition_executor::aproach_person_2_answer_question()
 {
   return dist_to_person >= minDist && dist_to_person <= maxDist;
-  //return true;
 }
 
 bool SPORecognition_executor::answer_question_2_object_recognition()
 {
   return answerFinished;
-  //return true;
 }
 
 bool SPORecognition_executor::object_recognition_2_End()
@@ -174,9 +169,8 @@ void SPORecognition_executor::stopObjCb(const std_msgs::Empty::ConstPtr& msg)
 void SPORecognition_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
 {
   dist_to_person = msg->dist;
-  removeDependency("mover_publisher");
+  //removeDependency("mover_publisher");
   personSaw = true;
-  //personDataSub.shutdown();
 }
 
 void SPORecognition_executor::objectCb(const std_msgs::String::ConstPtr& msg)
