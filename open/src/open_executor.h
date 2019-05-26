@@ -54,39 +54,42 @@ class Open_executor : public bica::open_HFSM
 public:
   Open_executor();
   void init_knowledge();
-  //void navigate_to_loc_code_iterative();
+  void navigate_to_loc_code_iterative();
   //void navigate_to_loc_code_once();
-  //void understand_excludes_nodes_code_iterative();
+  void understand_excludes_nodes_code_iterative();
   void understand_excludes_nodes_code_once();
   //void rescue_teddy_bear_code_iterative();
   //void rescue_teddy_bear_code_once();
   //void get_dijkstra_code_iterative();
-  //void get_dijkstra_code_once();
+  void get_dijkstra_code_once();
   //void Init_code_iterative();
   void Init_code_once();
   //void understand_goal_code_iterative();
   void understand_goal_code_once();
   //void return_to_home_code_iterative();
   //void return_to_home_code_once();
-  //bool understand_excludes_nodes_2_get_dijkstra();
-  //bool get_dijkstra_2_navigate_to_loc();
+  bool understand_excludes_nodes_2_get_dijkstra();
+  bool get_dijkstra_2_navigate_to_loc();
   bool understand_goal_2_understand_excludes_nodes();
   //bool rescue_teddy_bear_2_return_to_home();
   bool Init_2_understand_goal();
-  //bool navigate_to_loc_2_rescue_teddy_bear();
+  bool navigate_to_loc_2_rescue_teddy_bear();
 
   void addMapElement(float px, float py, float pz, float orientation, std::string key);
-  void pathSolverCb(const std_msgs::String::ConstPtr& msg);
+  void dijsktraOutCb(const std_msgs::String::ConstPtr& msg);
+  void commandsCb(const std_msgs::String::ConstPtr& msg);
   void locsCb(const std_msgs::String::ConstPtr& msg);
+  void targetReachedCb(const std_msgs::Empty::ConstPtr& msg);
   void talk(std::string str);
 
 private:
   ros::NodeHandle nh_;
-  ros::Subscriber pathSolver, locationsSub;
-  ros::Publisher locsPub, talk_pub;
+  ros::Subscriber pathSolver, locationsSub, commands_sub, loc_reached_sub;
+  ros::Publisher locsPub, talk_pub, navigate_pub;
   int locsIterator;
   std::map<std::string, geometry_msgs::PoseStamped> locations_map;
-  bool undersGoal2UndersExcludes;
+  std::vector<geometry_msgs::PoseStamped> waypoints_to_visit;
+  bool undersGoal2UndersExcludes, wps_ready, location_asked, dijsktra_rcv, goal_sended, loc_reached, nav_finished;
 };
 
 #endif

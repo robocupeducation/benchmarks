@@ -6,12 +6,13 @@
 
   <include file="$(find bica_dialog)/launch/bica_dialog_services.launch" />
 
-  <node pkg="bica_dialog" type="open_DialogInterface" name="open_DialogInterface" output="screen"/>
+  <node pkg="bica_dialog" type="location_DialogInterface" name="location_DialogInterface" output="screen"/>
+  <node pkg="bica_dialog" type="commands_DialogInterface" name="commands_DialogInterface" output="screen"/>
+  <node pkg="open" type="minimumpath.py" name="minimumpath" output="screen"/>
 
   <node name="open_executor_node" pkg="open"
     type="open_executor_node" respawn="false" output="screen" required="true"/>
 
   <node pkg="bica_dialog" type="pinger" name="pinger" output="screen"/>
-
   <node pkg="bica_dialog" type="batterycontrol" name="batterycontrol" output="screen"/>
 </launch>
