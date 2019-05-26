@@ -41,7 +41,6 @@ Open_executor::Open_executor()
 {
   locsIterator = 0;
   undersGoal2UndersExcludes = false;
-  printf("%s\n", "Hola Mundo");
   talk_pub = nh_.advertise<std_msgs::String>("/talk", 1);
   pathSolver = nh_.subscribe("/solve", 1, &Open_executor::pathSolverCb, this);
   locationsSub = nh_.subscribe("/locations", 1, &Open_executor::locsCb, this);
@@ -87,7 +86,7 @@ void Open_executor::understand_excludes_nodes_code_once()
 
 bool Open_executor::Init_2_understand_goal()
 {
-  return true;
+  return false;
 }
 
 bool Open_executor::understand_goal_2_understand_excludes_nodes()
