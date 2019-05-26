@@ -39,7 +39,13 @@
 
 Open_executor::Open_executor()
 {
+  locsIterator = 0;
+  undersGoal2UndersExcludes = false;
+  printf("%s\n", "Hola Mundo");
+  talk_pub = nh_.advertise<std_msgs::String>("/talk", 1);
   pathSolver = nh_.subscribe("/solve", 1, &Open_executor::pathSolverCb, this);
+  locationsSub = nh_.subscribe("/locations", 1, &Open_executor::locsCb, this);
+  locsPub = nh_.advertise<std_msgs::String>("/dijsktra_inp", 1);
   init_knowledge();
 }
 
@@ -58,6 +64,25 @@ void Open_executor::init_knowledge()
 void Open_executor::Init_code_once()
 {
   ROS_WARN("State Init");
+  std::string str = "Init state started";
+  talk(str);
+}
+
+void Open_executor::understand_goal_code_once()
+{
+  ROS_WARN("State Understand Goal");
+  addDependency("open_DialogInterface");
+  ROS_WARN("[Understand goal] post dependency");
+  std::string str = "Where I have to go?";
+  talk(str);
+  std_msgs::String s;
+  s.data = "entrance";
+  locsPub.publish(s);
+}
+
+void Open_executor::understand_excludes_nodes_code_once()
+{
+  ROS_WARN("State Understand Excludes Nodes");
 }
 
 bool Open_executor::Init_2_understand_goal()
@@ -65,10 +90,36 @@ bool Open_executor::Init_2_understand_goal()
   return true;
 }
 
+bool Open_executor::understand_goal_2_understand_excludes_nodes()
+{
+  if(undersGoal2UndersExcludes){
+    undersGoal2UndersExcludes = false;
+    return true;
+  }else{
+    return false;
+  }
+}
+
 void Open_executor::pathSolverCb(const std_msgs::String::ConstPtr& msg)
 {
   std::string m = msg->data;
   ROS_WARN("%s", m.c_str());
+}
+
+void Open_executor::locsCb(const std_msgs::String::ConstPtr& msg)
+{
+  ROS_WARN("Callback executing");
+  std::string str = msg->data;
+  std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
+  it = locations_map.find(str);
+  std::string answer;
+  if(it != locations_map.end()){
+    ROS_WARN("El destino existe");
+    std_msgs::String s;
+    s.data = str;
+    locsPub.publish(s);
+    undersGoal2UndersExcludes = true;
+  }
 }
 
 void Open_executor::addMapElement(float px, float py, float pz, float orientation, std::string key)
@@ -86,4 +137,11 @@ void Open_executor::addMapElement(float px, float py, float pz, float orientatio
   loc.pose.orientation.w = q[3];
 
   locations_map[key] = loc;
+}
+
+void Open_executor::talk(std::string str)
+{
+  std_msgs::String msg;
+  msg.data = str;
+  talk_pub.publish(msg);
 }

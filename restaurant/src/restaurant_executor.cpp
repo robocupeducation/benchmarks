@@ -94,6 +94,7 @@ void restaurant_executor::aproach_person_code_once()
 {
   ROS_WARN("State Aproach person");
   //Anadir dependencia con person followed data
+  addDependency("Person_Followed_Publisher");
   addDependency("PD_Algorithm");
 }
 void restaurant_executor::searching_person_code_once()
@@ -109,7 +110,6 @@ void restaurant_executor::understand_object_code_once()
 {
   ROS_WARN("State Understand Object");
   personSaw = false;
-  addDependency("Person_Followed_Publisher");
   removeDependency("PD_Algorithm");
   std::string str = "Do you want something?";
   talk(str);
@@ -232,8 +232,8 @@ bool restaurant_executor::navigate_to_location_2_aproach_object()
 
 bool restaurant_executor::aproach_object_2_navigate_to_end()
 {
-  return true;
-  //return personSaw;
+  //return true;
+  return personSaw;
 }
 
 bool restaurant_executor::navigate_to_end_2_End()

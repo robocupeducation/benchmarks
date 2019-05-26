@@ -43,7 +43,7 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "Open_HFSM");
   ros::NodeHandle n;
 
-  ros::Rate loop_rate(3);
+  ros::Rate loop_rate(5);
 
   Open_executor exec;
 
@@ -55,7 +55,7 @@ int main(int argc, char** argv)
     ros::spinOnce();
     loop_rate.sleep();
   }
-  ros::spin();
+  //ros::spin();
 
   return 0;
 }

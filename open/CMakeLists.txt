@@ -5,21 +5,10 @@ project(open)
 # add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED
-  std_msgs
+  roscpp
   rospy
   bica
-  bica_msgs
-  message_generation
-)
-
-add_message_files(
-  FILES
-  locationsArray.msg
-)
-
-generate_messages(
-  DEPENDENCIES
-  std_msgs
+  follow_person
 )
 
 include_directories(
