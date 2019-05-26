@@ -146,8 +146,6 @@ class Solver():
         arista5 = relacionar(grafo, d, c, 1)
         arista6 = relacionar(grafo, e, c, 1)
 
-
-
         # path = caminoMinimo(grafo,'A', self.nodesList[0])
         path = caminoMinimo(grafo,self.nodesList[0], self.nodesList[1])
         print (path)
@@ -161,7 +159,7 @@ class Solver():
             rate.sleep()
             self.solvePublisher.publish(location)
             rate.sleep()
-        self.solvePublisher.publish("no more points")
+        self.solvePublisher.publish("end")
 
 
 
