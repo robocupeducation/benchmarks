@@ -1,11 +1,6 @@
-#!/usr/bin/env python
-import rospy
-from collections import defaultdict
-from std_msgs.msg import String
-import sys
 from collections import deque
 
-class Grafo():
+class Grafo(object):
 
     def __init__(self):
         self.relaciones = {}
@@ -13,7 +8,7 @@ class Grafo():
     def __str__(self):
         return str(self.relaciones)
 
-class Arista():
+class Arista(object):
 
     def __init__(self, elemento, peso):
         self.elemento = elemento
@@ -22,7 +17,7 @@ class Arista():
     def __str__(self):
         return str(self.elemento) + str(self.peso)
 
-    def changeWeight(self,weight):
+    def aristaChangeWeight(self,weight):
         self.peso = weight
 
 def agregar(grafo, elemento):
@@ -82,93 +77,25 @@ def menorValorNoProcesado(etiquetas, procesados):
     etiquetadosSinProcesar = filter(lambda (nodo,_):not nodo in procesados, etiquetas.iteritems())
     return min(etiquetadosSinProcesar, key=lambda (_, (acum, __)): acum)[0]
 
-location2node = {
-    'kitchen':'A',
-    'living room':'B',
-    'studio':'C',
-    'entrance':'D',
-    'bathroom':'E',
-}
-
-node2location = {
-    'A':'kitchen',
-    'B':'living room',
-    'C':'studio',
-    'D':'entrance',
-    'E':'bathroom',
-}
-
-class Solver():
-    def __init__(self):
-        self.solvePublisher = rospy.Publisher('/dijsktra_out', String, queue_size = 1)
-        self.inputSubscriber = rospy.Subscriber("/dijsktra_inp", String, self.inputCallback)
-        #Lista que guarda los nodos que necesito saber: El primero es el destino y
-        #el resto son excluyentes
-        self.nodesList = []
-        self.bweight = 1
-        self.dweight = 1
-        self.eweight = 1
-
-    def inputCallback(self, data):
-        if(data.data != "finish"):
-            self.nodesList.append(data.data)
-        else:
-            self.minimumPath()
-
-    def minimumPath(self):
-
-        a = "A"
-        b = "B"
-        c = "C"
-        d = "D"
-        e = "E"
-
-        grafo = Grafo()
-
-        agregar(grafo, a)
-        agregar(grafo, b)
-        agregar(grafo, c)
-        agregar(grafo, d)
-        agregar(grafo, e)
-
-        for i in range(2,len(self.nodesList)):
-            if self.nodesList[i] == 'B':
-                self.bweight = 99
-            elif self.nodesList[i] == 'D':
-                self.dweight = 99
-            elif self.nodesList[i] == 'E':
-                self.eweight = 99
-
-        arista1 = relacionar(grafo, a, b, self.bweight)
-        arista2 = relacionar(grafo, a, d, self.dweight)
-        arista3 = relacionar(grafo, a, e, self.eweight)
-        arista4 = relacionar(grafo, b, c, 1)
-        arista5 = relacionar(grafo, d, c, 1)
-        arista6 = relacionar(grafo, e, c, 1)
-
-
-
-        # path = caminoMinimo(grafo,'A', self.nodesList[0])
-        path = caminoMinimo(grafo,self.nodesList[0], self.nodesList[1])
-        print (path)
-
-        pathway = []
-        for way in path:
-            pathway.append(node2location[way])
-
-        rate = rospy.Rate(5)
-        for location in pathway:
-            rate.sleep()
-            self.solvePublisher.publish(location)
-            rate.sleep()
-        self.solvePublisher.publish("no more points")
-
-
-
-try:
-    rospy.init_node('dijstrasolve')
-    solver = Solver()
-    rospy.spin()
-
-except rospy.ROSInterruptException:
-    pass
+# a = "A"
+# b = "B"
+# c = "C"
+# d = "D"
+# e = "E"
+#
+# grafo = Grafo()
+#
+# agregar(grafo, a)
+# agregar(grafo, b)
+# agregar(grafo, c)
+# agregar(grafo, d)
+# agregar(grafo, e)
+#
+# arista1 = relacionar(grafo, a, b, 1)
+# arista2 = relacionar(grafo, a, d, 3)
+# arista3 = relacionar(grafo, a, e, 2)
+# arista4 = relacionar(grafo, b, c, 1)
+# arista5 = relacionar(grafo, d, c, 1)
+# arista6 = relacionar(grafo, e, c, 1)
+#
+# print caminoMinimo(grafo, a, c)
