@@ -47,7 +47,7 @@
 #include "restaurant_HFSM.h"
 #include <string>
 #include <map>
-#include "follow_person/PersonFollowedData.h"
+#include "robocuphomeeducation_msgs/PersonFollowedData.h"
 
 class restaurant_executor : public bica::restaurant_HFSM
 {
@@ -91,7 +91,7 @@ public:
   void talk(std::string str);
   void addMapElement(float px, float py, float pz, float orientation, std::string key);
   void targetReachedCb(const std_msgs::Empty::ConstPtr& msg);
-  void personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg);
+  void personDataCb(const robocuphomeeducation_msgs::PersonFollowedData::ConstPtr& msg);
   void stopObjCb(const std_msgs::Empty::ConstPtr& msg);
   void nextLocationCb(const std_msgs::String::ConstPtr& msg);
   void orderCb(const std_msgs::String::ConstPtr& msg);

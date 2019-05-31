@@ -64,8 +64,8 @@ void restaurant_executor::init_knowledge()
   //addMapElement(0.0, 0.0, 0.0, -3.1416 / 2.0, "init");
   addMapElement(0.0, 0.0, 0.0, -3.1416 / 2.0, "entrance");
   addMapElement(1.8, -1.9, 0.0, 3.1416 / 2.0, "kitchen");
-  addMapElement(1.45, 1.8, 0.0, 3.1416 / 2.0, "living room");
-  addMapElement(4.23, 0.24, 0.0, -3.1416 / 2.0, "studio");
+  addMapElement(1.39, 1.62, 0.0, 3.1416 / 2.0, "living room");
+  addMapElement(4.23, 0.24, 0.0, -3.1416, "studio");
 }
 
 void restaurant_executor::Init_code_once()
@@ -94,7 +94,7 @@ void restaurant_executor::aproach_person_code_once()
 {
   ROS_WARN("State Aproach person");
   //Anadir dependencia con person followed data
-  addDependency("Person_Followed_Publisher");
+  //addDependency("Person_Followed_Publisher");
   addDependency("PD_Algorithm");
 }
 void restaurant_executor::searching_person_code_once()
@@ -191,27 +191,27 @@ bool restaurant_executor::Init_2_navigate_to_init()
 
 bool restaurant_executor::searching_person_2_aproach_person()
 {
-  return true;
-  /*
+  //return true;
+
   if (personSaw)
   {
     personSaw = false;
     return true;
   }
   return false;
-  */
+
 }
 
 bool restaurant_executor::navigate_to_init_2_searching_person()
 {
-  return true;
-  //return loc_reached;
+  //return true;
+  return loc_reached;
 }
 
 bool restaurant_executor::aproach_person_2_understand_object()
 {
-  return true;
-  //return personSaw;
+  //return true;
+  return personSaw;
 }
 
 bool restaurant_executor::understand_object_2_understand_location()
@@ -226,8 +226,8 @@ bool restaurant_executor::understand_location_2_navigate_to_location()
 
 bool restaurant_executor::navigate_to_location_2_aproach_object()
 {
-  return true;
-  //return loc_reached;
+  //return true;
+  return loc_reached;
 }
 
 bool restaurant_executor::aproach_object_2_navigate_to_end()
@@ -241,7 +241,7 @@ bool restaurant_executor::navigate_to_end_2_End()
   return loc_reached;
 }
 
-void restaurant_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
+void restaurant_executor::personDataCb(const robocuphomeeducation_msgs::PersonFollowedData::ConstPtr& msg)
 {
   dist_to_person = msg->dist;
   //removeDependency("mover_publisher");

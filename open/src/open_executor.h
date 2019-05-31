@@ -45,7 +45,7 @@
 #include "open_HFSM.h"
 #include <string>
 #include <ctime>
-#include "follow_person/PersonFollowedData.h"
+#include "robocuphomeeducation_msgs/PersonFollowedData.h"
 #include "geometry_msgs/PoseStamped.h"
 #include <tf2/LinearMath/Quaternion.h>
 

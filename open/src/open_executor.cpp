@@ -55,19 +55,25 @@ Open_executor::Open_executor()
 void Open_executor::init_knowledge()
 {
   //cargar mapa
-  addMapElement(0.0, 0.0, 0.0, 0.0, "entrance");
+  //addMapElement(0.0, 0.0, 0.0, 0.0, "entrance");
   addMapElement(2.32, -0.67, 0.0, 3.1416 / 2.0, "kitchen");
-  addMapElement(2.98, 1.62, 0.0, 3.1416 / 2.0, "living room");
-  addMapElement(1.62, 1.61, 0.0, -3.1416, "studio");
-  addMapElement(3.2, -0.05, 0.0, -3.1416, "bath room");
+  //addMapElement(2.98, 1.62, 0.0, 3.1416 / 2.0, "living room");
+  addMapElement(1.62, 1.61, 0.0, -3.1416 / 2.0, "studio");
+  //addMapElement(3.2, -0.05, 0.0, -3.1416, "bathroom");
 
 }
 
 void Open_executor::Init_code_once()
 {
-  ROS_WARN("State Init");
+  ROS_WARN("[Open_executor] State Init");
   std::string str = "Init state started";
   talk(str);
+  std::map<std::string, geometry_msgs::PoseStamped>::iterator it;
+  it = locations_map.find("kitchen");
+  waypoints_to_visit.push_back(it->second);
+  it = locations_map.find("studio");
+  waypoints_to_visit.push_back(it->second);
+
 }
 
 void Open_executor::understand_goal_code_once()
@@ -76,27 +82,24 @@ void Open_executor::understand_goal_code_once()
   addDependency("location_DialogInterface");
   std::string str = "Where I have to go?";
   talk(str);
-  std_msgs::String s;
-  s.data = "entrance";
-  locsPub.publish(s);
 }
 
 void Open_executor::understand_excludes_nodes_code_once()
 {
-  ROS_WARN("State Understand Excludes Nodes");
-  addDependency("commands_DialogInterface");
-  location_asked = false;
+  //ROS_WARN("State Understand Excludes Nodes");
+  //addDependency("commands_DialogInterface");
+  //location_asked = false;
 }
 
 void Open_executor::understand_excludes_nodes_code_iterative()
 {
-  ROS_WARN("understand_excludes_nodes");
+  /*ROS_WARN("understand_excludes_nodes");
   if (!location_asked)
   {
     std::string str = "Tell me the forbidden rooms";
     talk(str);
     location_asked = true;
-  }
+  }*/
 }
 
 void Open_executor::get_dijkstra_code_once()
@@ -141,17 +144,17 @@ bool Open_executor::understand_goal_2_understand_excludes_nodes()
 
 bool Open_executor::understand_excludes_nodes_2_get_dijkstra()
 {
-  return wps_ready;
+  return true;
 }
 
 bool Open_executor::get_dijkstra_2_navigate_to_loc()
 {
-  return dijsktra_rcv;
+  return true;
 }
 
 bool Open_executor::navigate_to_loc_2_rescue_teddy_bear()
 {
-  return nav_finished;
+  return false;
 }
 
 void Open_executor::dijsktraOutCb(const std_msgs::String::ConstPtr& msg)

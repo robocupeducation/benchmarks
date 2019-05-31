@@ -45,7 +45,7 @@
 #include "spo_recognition_HFSM.h"
 #include <string>
 #include <ctime>
-#include "follow_person/PersonFollowedData.h"
+#include "robocuphomeeducation_msgs/PersonFollowedData.h"
 
 class SPORecognition_executor : public bica::spo_recognition_HFSM
 {
@@ -72,7 +72,7 @@ public:
   bool object_recognition_2_End();
 
   void talk(std::string str);
-  void personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg);
+  void personDataCb(const robocuphomeeducation_msgs::PersonFollowedData::ConstPtr& msg);
   void objectCb(const std_msgs::String::ConstPtr& msg);
   void speakCb(const std_msgs::Empty::ConstPtr& msg);
   void stopObjCb(const std_msgs::Empty::ConstPtr& msg);

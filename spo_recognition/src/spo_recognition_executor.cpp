@@ -166,7 +166,7 @@ void SPORecognition_executor::stopObjCb(const std_msgs::Empty::ConstPtr& msg)
   objRecogFinished = true;
 }
 
-void SPORecognition_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
+void SPORecognition_executor::personDataCb(const robocuphomeeducation_msgs::PersonFollowedData::ConstPtr& msg)
 {
   dist_to_person = msg->dist;
   //removeDependency("mover_publisher");

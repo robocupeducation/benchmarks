@@ -1,9 +1,9 @@
 <launch>
-  <!--<include file="$(find restaurant)/launch/restaurant_data_logging.launch" />-->
+  <include file="$(find restaurant)/launch/restaurant_data_logging.launch" />
   <include file="$(find follow_person)/launch/follow_person.launch" />
   <node pkg="navigation_robocup_edu" type="mover_node" name="mover_publisher" />
   <include file="$(find bica_dialog)/launch/bica_dialog_services.launch" />
-  <node pkg="bica_dialog" type="ros_soundclient.py" name="ros_soundclient" output="screen"/>
+  <!--<node pkg="bica_dialog" type="ros_soundclient.py" name="ros_soundclient" output="screen"/>-->
   <node pkg="bica_dialog" type="location_DialogInterface" name="location_DialogInterface" output="screen"/>
   <node pkg="bica_dialog" type="order_DialogInterface" name="order_DialogInterface" output="screen"/>
   <node name="restaurant_executor_node" pkg="restaurant"

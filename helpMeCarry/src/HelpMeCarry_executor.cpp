@@ -236,7 +236,7 @@ void HelpMeCarry_executor::errorCb(const std_msgs::String::ConstPtr& msg)
   }
 }
 
-void HelpMeCarry_executor::personDataCb(const follow_person::PersonFollowedData::ConstPtr& msg)
+void HelpMeCarry_executor::personDataCb(const robocuphomeeducation_msgs::PersonFollowedData::ConstPtr& msg)
 {
   dist_to_person = msg->dist;
   removeDependency("mover_publisher");

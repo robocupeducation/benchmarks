@@ -8,7 +8,7 @@ find_package(catkin REQUIRED
   roscpp
   rospy
   bica
-  follow_person
+  robocuphomeeducation_msgs
 )
 
 catkin_package(
